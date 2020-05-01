@@ -1,0 +1,12 @@
+Django
+djangorestframework
+djoser
+Pillow
+django-storages
+psycopg2
+psycopg2-binary
+django-cors-headers
+django-localflavor
+timezonefinder
+boto3
+geopy
