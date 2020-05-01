@@ -1,1 +1,8 @@
-change puids so ppl cant fraud
+APP:
+    - Add more detailed profile view 
+    - Make history screen nicer
+    - Make timeslotcard nicer
+    - Make a timeslot card that shows the venue and doesnt have ontap for history screen 
+    - test different screen sizes, on android 
+Backend:
+    -
