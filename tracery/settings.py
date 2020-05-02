@@ -25,7 +25,7 @@ SECRET_KEY = 'xvamp=me)66twer&*2cc!yg(q@+r0p_j%w23x(tux@)g$7wpk%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['54.242.194.29', '127.0.0.1', 'api.tracery.us']
+ALLOWED_HOSTS = ['23.22.177.127', '127.0.0.1', 'api.tracery.us']
 
 
 # Application definition
