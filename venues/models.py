@@ -4,6 +4,7 @@ from users.models import Account
 from datetime import datetime, timedelta
 import uuid
 from timezonefinder import TimezoneFinder
+import pytz
 from geolocation.models import Coordinates, Address
 
 # Create your models here.
@@ -49,10 +50,16 @@ class Venue(models.Model):
         return timeslots
 
 class TimeSlot(models.Model):
+    TYPES = [
+        ("All", _("All")),
+        ("Eldery", _("Elderly")),
+        ("Frontline", _("Frontline")),
+    ]
     venue = models.ForeignKey(Venue, on_delete=models.DO_NOTHING, related_name="time_slots")
     start = models.DateTimeField()
     stop = models.DateTimeField()
     max_attendees = models.IntegerField(_("Max attendees"))
+    type = models.CharField(max_length=25, choices=TYPES, default="All")
     attendees = models.ManyToManyField(Account, blank=True, related_name="time_slots")
 
     @property
@@ -70,10 +77,24 @@ class TimeSlot(models.Model):
 
     @property 
     def current(self):
-        now = datetime.now()
-        return self.start < now and self.stop > now
+        utc = pytz.utc
+        now = utc.localize(datetime.now())
+        try:
+            start = utc.localize(self.start)
+        except:
+            start = self.start
+        try:
+            stop = utc.localize(self.stop)
+        except:
+            stop = self.stop
+        return start < now and stop > now
     
     @property
     def past(self):
-        now = datetime.now()
-        return self.stop > now
+        utc = pytz.utc
+        now = utc.localize(datetime.now())  
+        try:
+            stop = utc.localize(self.stop)
+        except:
+            stop = self.stop
+        return stop < now
