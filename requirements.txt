@@ -10,3 +10,6 @@ django-localflavor
 timezonefinder
 boto3
 geopy
+requests
+geo
+geoip2
