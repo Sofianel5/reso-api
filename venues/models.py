@@ -44,7 +44,12 @@ class Venue(models.Model):
         timezone = tf.timezone_at(lng=longitude, lat=latitude)
         self.timezone = timezone
         super(Venue, self).save(*args, **kwargs)
-    def get_current_timeslots(self):
+    def bookable_time_slots(self):
+        now = datetime.now()
+        timeslots = self.time_slots.filter(stop__gte=now)
+        return timeslots
+
+    def current_timeslots(self):
         now = datetime.now()
         timeslots = self.time_slots.filter(start__lte=now, stop__gte=now)
         return timeslots

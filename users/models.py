@@ -22,7 +22,6 @@ class Account(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    is_venueadmin = models.BooleanField(default=False)
     last_login = models.DateTimeField(verbose_name=_("Last login"), auto_now=True)
     is_locked = models.BooleanField(default=True)
     objects = AccountManager()
@@ -45,9 +44,13 @@ class Account(AbstractBaseUser):
     
     def save(self, *args, **kwargs):
         super(Account, self).save(*args, **kwargs)
+    
+    @property 
+    def is_venueadmin(self):
+        return self.venues.all().count() != 0
 
 
 class PeerToVenueHandshake(models.Model):
-    person = models.ForeignKey(Account, on_delete=models.DO_NOTHING, related_name="handshakes")
+    user = models.ForeignKey(Account, on_delete=models.DO_NOTHING, related_name="handshakes")
     venue = models.ForeignKey("venues.Venue", on_delete=models.DO_NOTHING, related_name="handshakes")
     time = models.DateTimeField(auto_now_add=True)

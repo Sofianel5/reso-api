@@ -21,7 +21,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from geolocation.models import Coordinates, Address
-from .utils import get_coordinates
+from .utils import get_coordinates, supported_version
 from pytz import timezone
 import pytz
 
@@ -115,11 +115,12 @@ class VenueSearch(APIView):
 class CustomUserUpdate(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
+        if not supported_version(request):
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         user = request.user
         coordinates = get_coordinates(request)
         if user.coordinates != coordinates:
-            user.coordinates = coordinates
-            user.address = coordinates.to_address()
+            update_location(user, coordinates)
         user_serializer = InternalAccountSerializer(user)
         return Response(user_serializer.data)
 
@@ -129,7 +130,7 @@ class ToggleLockState(APIView):
         user = request.user 
         user.is_locked = not user.is_locked
         user.save()
-        return Response(status=status.HTTP_200_OK) 
+        return Response({"is_locked": user.is_locked}, status=status.HTTP_200_OK) 
 
 class UserScanManager(APIView):
     permission_classes = [IsAuthenticated]
@@ -142,9 +143,9 @@ class UserScanManager(APIView):
             thread["success"] = True
             return JsonResponse(thread, safe=False)
         else:
-            return JsonResponse({"success": False, "message": _("You haven't been scanned yet.")}, safe=False)
+            return JsonResponse({"success": False, "message": _("You haven't been scanned yet.")}, safe=False, status=status.HTTP_404_NOT_FOUND)
     def post(self, request):
-        user = request.user 
+        user = request.user
         thread = HandshakeRequestFromVenue.objects.get(pk=request.POST["thread"])
         thread.confirm()
         return Response(status=status.HTTP_200_OK)
@@ -187,6 +188,41 @@ class UserBookingsManager(APIView):
             "current": TimeSlotSerializer(current, many=True).data,
         }
         return Response(res)
+
+class Fixture(APIView):
+    def get(self, request):
+        if request.GET["type"] == "thread":
+            record = HandshakeRequestFromVenue.objects.all()[0]
+            serializer = HandshakeRequestFromVenueSerializer(record)
+        if "venue" in request.GET["type"]:
+            record = Venue.objects.all()[0]
+            if request.GET["type"] == "venue":
+                serializer = VenueSerializer(record)
+            if request.GET["type"] == "venue_small":
+                serializer = VenueSerializer(record)
+            if request.GET["type"] == "venue_detail":
+                serializer = VenueDetailSerializer(record)
+        if "user" in request.GET["type"]:
+            record = Account.objects.all()[0]
+            if request.GET["type"] == "user_signup":
+                serializer = UserRegistrationSerializer(record)
+            if request.GET["type"] == "user_external":
+                serializer = ExternalAccountSerializer(record)
+            if request.GET["type"] == "user_internal":
+                serializer = InternalAccountSerializer(record)
+        if request.GET["type"] == "handshake":
+            record = PeerToVenueHandshake.objects.all()[0]
+            serializer = PeerToVenueHandshakeSerializer(record)
+        if request.GET["type"] == "timeslot":
+            record = TimeSlot.objects.all()[0]
+            serializer = TimeSlotSerializer(record)
+        if request.GET["type"] == "address":
+            record = Address.objects.all()[0]
+            serializer = AddressSerializer(record)
+        if request.GET["type"] == "coordinates":
+            record = Coordinates.objects.all()[0]
+            serializer = CoordinatesSerializer(record)
+        return Response(serializer.data)
 
 
 

@@ -14,6 +14,14 @@ class HandshakeRequestFromVenue(models.Model):
     def is_valid(self):
         return self.from_confirmed and self.to_confirmed
 
+    @property
+    def venue(self):
+        return self._from 
+    
+    @property
+    def user(self):
+        return self._to
+
     def __str__(self):
         return "From(venue) " + self._from.__str__() + " to " + self._to.__str__()
     

@@ -30,6 +30,7 @@ class Coordinates(models.Model):
         GOOGLE_KEY = settings.GOOGLE_KEY
         request = requests.get(f"https://maps.googleapis.com/maps/api/geocode/json?latlng={self.to_csv()}&key={GOOGLE_KEY}")
         response = dict(request.json())
+        print(response)
         address_1 = response['results'][0]["address_components"][0]['long_name'] + " " + response['results'][0]["address_components"][1]['long_name'] 
         post_code = response['results'][0]["address_components"][7]['long_name']
         city = response['results'][0]["address_components"][3]['long_name']

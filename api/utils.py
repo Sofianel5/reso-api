@@ -32,3 +32,8 @@ def update_location(user, coordinates):
     user.address = coordinates.to_address()
     user.save()
     return user
+
+def supported_version(request):
+    supported = ["0"]
+    print(request.META)
+    return request.META.get('HTTP_APP_VERSION') in supported

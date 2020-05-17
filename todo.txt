@@ -2,7 +2,20 @@ APP:
     - Add more detailed profile view 
     - Make history screen nicer
     - Make timeslotcard nicer
-    - Make a timeslot card that shows the venue and doesnt have ontap for history screen 
     - test different screen sizes, on android 
+    - Internationalizations
+    - Allow for special types of users (Frontline, Elderly)
+    - Timeslot card for different types of users 
+    - Error handling
+    - Linked through navigaton
+    - Caching
+    - Disposes to prevent memory leaks
 Backend:
-    -
+    - More fallbacks if geolocation doesn't work 
+    - Find possible breakpoints and create fallbacks
+    - Make sure timezones are properly being conveyed and calculated 
+    - Eldery, frontline users & timeslots 
+    - Error handling
+    - Caching
+    - Redis/celery event handler
+    - Reset password

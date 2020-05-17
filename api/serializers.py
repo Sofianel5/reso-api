@@ -8,12 +8,17 @@ from geolocation.models import Coordinates, Address
 class UserRegistrationSerializer(BaseUserRegistrationSerializer):
     class Meta(BaseUserRegistrationSerializer.Meta):
         fields = ('email', 'first_name', 'last_name', 'password')
+    
 
 class ExternalAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account 
-        exclude = ["password", "last_login", "email", "date_joined", "id", "public_id", "is_active", "is_locked", "is_venueadmin", "is_staff", "is_admin"]
+        fields = ["id", "first_name", "last_name"]
 
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = "__all__"
 
 class CoordinatesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,17 +28,35 @@ class CoordinatesSerializer(serializers.ModelSerializer):
 class VenueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Venue
-        exclude = ['admin', 'email', 'phone', 'website']
+        exclude = ['admin']
         depth = 1
 
+class TitleVenueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Venue
+        fields = ["id", "title"]
+
+class PeerToVenueHandshakeSerializer(serializers.ModelSerializer):
+    user = ExternalAccountSerializer()
+    venue = TitleVenueSerializer()
+    class Meta:
+        model = PeerToVenueHandshake
+        fields = "__all__"
+
 class TimeSlotSerializer(serializers.ModelSerializer):
-    venue = VenueSerializer()
+    venue = TitleVenueSerializer()
     class Meta:
         model = TimeSlot 
-        fields = ['start', 'stop', 'max_attendees', 'num_attendees', 'id', 'current', 'past', 'venue']
+        fields = ['start', 'stop', 'max_attendees', 'num_attendees', 'id', 'current', 'past', 'venue', 'type']
         
+class InfoTimeSlotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSlot 
+        fields = ['start', 'stop', 'max_attendees', 'num_attendees', 'id', 'current', 'past', 'type']
+
 class VenueDetailSerializer(serializers.ModelSerializer):
     admin = ExternalAccountSerializer()
+    bookable_time_slots = InfoTimeSlotSerializer(many=True)
     #time_slots = TimeSlotSerializer(many=True)
     class Meta:
         model = Venue
@@ -41,15 +64,16 @@ class VenueDetailSerializer(serializers.ModelSerializer):
         depth = 1
 
 class InternalAccountSerializer(serializers.ModelSerializer):
+    is_venueadmin = serializers.ReadOnlyField()
     class Meta:
         model = Account
-        exclude = ["password"]
+        exclude = ["password", "is_staff", "last_login", "is_admin", "is_active"]
         depth = 2
-
+        
 class HandshakeRequestFromVenueSerializer(serializers.ModelSerializer):
-    _from = VenueSerializer()
-    _to = ExternalAccountSerializer()
+    venue = TitleVenueSerializer()
+    user = ExternalAccountSerializer()
     class Meta:
         model = HandshakeRequestFromVenue
-        fields = "__all__"
-        depth = 2
+        exclude = ["_from", "_to"]
+        depth = 1
