@@ -77,3 +77,10 @@ class HandshakeRequestFromVenueSerializer(serializers.ModelSerializer):
         model = HandshakeRequestFromVenue
         exclude = ["_from", "_to"]
         depth = 1
+
+class VenueAdminSerializer(serializers.ModelSerializer):
+    venues = VenueSerializer(many=True)
+    class Meta:
+        model = Account
+        exclude = ["password", "is_staff", "last_login", "is_admin", "is_active"]
+        depth = 2

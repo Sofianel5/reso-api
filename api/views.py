@@ -21,8 +21,9 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from geolocation.models import Coordinates, Address
-from .utils import get_coordinates, supported_version
+from .utils import get_coordinates, supported_version, update_location
 from pytz import timezone
+import dateutil.parser
 import pytz
 
 class VenueList(APIView):
@@ -49,7 +50,6 @@ class VenueDetail(APIView):
         try:
             return Venue.objects.get(pk=pk)
         except:
-            print("couldn't find V")
             raise Http404
     def get(self, request, pk):
         venue = self.get_object(pk)
@@ -75,17 +75,24 @@ class TimeSlotManager(APIView):
 
     def post(self, request, pk):
         venue = Venue.objects.get(pk=pk)
+        try:
+            assert(request.user == venue.admin)
+        except:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         params = request.POST
         utc = pytz.utc 
         local = timezone(get_coordinates(request).to_timezone())
-        """ CONVERT STR REQ TO DATETIME """
+        params['start'] = dateutil.parser.parse(params['start'])
+        params['stop'] = dateutil.parser.parse(params['stop'])
         params['start'] = local.normalize(local.localize(params['start']))
         params['stop'] = local.normalize(local.localize(params['stop']))
         params['start'] = params['start'].astimezone(utc)
         params['stop'] = params['stop'].astimezone(utc)
+        params['venue'] = venue
         time_slot = TimeSlot.objects.create(params, save=False)
         time_slot.venue = venue
         time_slot.save()
+
 class TimeSlotRegistration(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request, venue, timeslot):
@@ -98,7 +105,16 @@ class TimeSlotRegistration(APIView):
             return Response(status=status.HTTP_201_CREATED)
         except:
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-
+    
+    def get(self, request, venue, timeslot):
+        venue = Venue.objects.get(pk=venue)
+        timeslot = TimeSlot.objects.get(pk=timeslot)
+        user = request.user 
+        if user not in timeslot.attendees.all():
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        
 class VenueSearch(APIView):
     def get(self, request):
         q = request.GET['q']
@@ -153,25 +169,29 @@ class UserScanManager(APIView):
 class VenueScanManager(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request, pk):
+        user = request.user
+        venue = Venue.objects.get(pk=pk)
+        to = Account.objects.get(public_id=uuid.UUID(request.POST["to"]))
         try:
-            user = request.user
-            venue = Venue.objects.get(pk=pk)
-            to = Account.objects.get(public_id=uuid.UUID(request.POST["to"]))
             assert(not to.is_locked)
+        except:
+            return Response(status=status.HTTP_417_EXPECTATION_FAILED)
+        try:
             assert(venue.admin == user)
-            registered = False
-            timeslots = venue.get_current_timeslots()
-            for timeslot in timeslots:
-                print(timeslot.attendees.all())
-                if to in timeslot.attendees.all():
-                    registered = True 
+        except:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        registered = False
+        timeslots = venue.get_current_timeslots()
+        for timeslot in timeslots:
+            if to in timeslot.attendees.all():
+                registered = True 
+        try:
             assert(registered)
-            hs = HandshakeRequestFromVenue.objects.create(_from=venue, _to=to)
-            serializer = HandshakeRequestFromVenueSerializer(hs)
-            return Response(serializer.data)
-        except Exception as e:
-            print(e)
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        except:
+            return Response(status=status.HTTP_412_PRECONDITION_FAILED)
+        hs = HandshakeRequestFromVenue.objects.create(_from=venue, _to=to)
+        serializer = HandshakeRequestFromVenueSerializer(hs)
+        return Response(serializer.data)
 
 class UserBookingsManager(APIView):
     def get(self, request):
@@ -189,6 +209,34 @@ class UserBookingsManager(APIView):
         }
         return Response(res)
 
+class VenueAdminLogin(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        if (request.user.venues.count() != 0):
+            serialized = dict(VenueAdminSerializer(user).data)
+            serialized["venue"] = serialized["venues"][0]
+            return Response(serialized)
+        else:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+class VenueAdminTimeSlotInfo(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, venue):
+        user = request.user
+        venue = Venue.objects.get(pk=pk)
+        try:
+            assert(venue.admin == user)
+        except:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        history = TimeSlots.objects.filter(venue=venue, past=True)
+        current = TimeSlots.objects.filter(venue=venue, past=False)
+        res = {
+            "history": TimeSlotSerializer(history, many=True).data,
+            "current": TimeSlotSerializer(current, many=True).data,
+        }
+        return Response(res)
+        
 class Fixture(APIView):
     def get(self, request):
         if request.GET["type"] == "thread":
