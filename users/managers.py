@@ -35,6 +35,5 @@ class AccountManager(BaseUserManager):
         user.set_password(password)
         user.is_admin = True 
         user.is_staff = True 
-        user.is_venueadmin = True 
         user.save(using=self._db)
         return user
