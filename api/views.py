@@ -79,19 +79,20 @@ class TimeSlotManager(APIView):
             assert(request.user == venue.admin)
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        params = request.POST
         utc = pytz.utc 
         local = timezone(get_coordinates(request).to_timezone())
-        params['start'] = dateutil.parser.parse(params['start'])
-        params['stop'] = dateutil.parser.parse(params['stop'])
+        params = {}
+        params['start'] = dateutil.parser.parse(request.POST.get('start')[0])
+        params['stop'] = dateutil.parser.parse(request.POST.get('stop')[0])
         params['start'] = local.normalize(local.localize(params['start']))
         params['stop'] = local.normalize(local.localize(params['stop']))
-        params['start'] = params['start'].astimezone(utc)
-        params['stop'] = params['stop'].astimezone(utc)
+        params['start'] = params['start'].astimezone(utc).replace(tzinfo=None)
+        params['stop'] = params['stop'].astimezone(utc).replace(tzinfo=None)
+        params["max_attendees"] = request.POST.get("max_attendees")
         params['venue'] = venue
-        time_slot = TimeSlot.objects.create(params, save=False)
-        time_slot.venue = venue
+        time_slot = TimeSlot.objects.create(**params)
         time_slot.save()
+        return Response(status=status.HTTP_200_OK)
 
 class TimeSlotRegistration(APIView):
     permission_classes = [IsAuthenticated]
@@ -222,15 +223,21 @@ class VenueAdminLogin(APIView):
 
 class VenueAdminTimeSlotInfo(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self, request, venue):
+    def get(self, request, pk):
         user = request.user
         venue = Venue.objects.get(pk=pk)
         try:
             assert(venue.admin == user)
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        history = TimeSlots.objects.filter(venue=venue, past=True)
-        current = TimeSlots.objects.filter(venue=venue, past=False)
+        ts = venue.time_slots.all()
+        history = []
+        current = []
+        for t in ts:
+            if t.past:
+                history.append(t)
+            else:
+                current.append(t)
         res = {
             "history": TimeSlotSerializer(history, many=True).data,
             "current": TimeSlotSerializer(current, many=True).data,

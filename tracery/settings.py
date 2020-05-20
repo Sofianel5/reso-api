@@ -99,9 +99,13 @@ WSGI_APPLICATION = 'tracery.wsgi.application'
 """
 DATABASES = {
    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'resodb',
+        'USER': 'dbmasteruser',
+        'PASSWORD': 'MRL*J?lyOdmGibV}*xR2LhrXDX0L$MM5',
+        'HOST': 'ls-c0018cd33dbdbeb5013976e76c291fda15d358ac.cfsduybybyb5.us-east-1.rds.amazonaws.com',
+        'PORT': '5432',
+    } 
 }
 
 

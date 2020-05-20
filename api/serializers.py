@@ -9,6 +9,11 @@ class UserRegistrationSerializer(BaseUserRegistrationSerializer):
     class Meta(BaseUserRegistrationSerializer.Meta):
         fields = ('email', 'first_name', 'last_name', 'password')
     
+class TimeSlotCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSlot
+        fields = ['start', 'stop', 'type', 'max_attendees', 'venue']
+
 
 class ExternalAccountSerializer(serializers.ModelSerializer):
     class Meta:
