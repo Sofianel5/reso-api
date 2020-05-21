@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'localflavor',
+    'django_db_logger',
 ]
 
 MIDDLEWARE = [
@@ -75,6 +76,31 @@ TEMPLATES = [
         },
     },
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
+    },
+    'handlers': {
+        'db_log': {
+            'level': 'DEBUG',
+            'class': 'django_db_logger.db_log_handler.DatabaseLogHandler'
+        },
+    },
+    'loggers': {
+        'db': {
+            'handlers': ['db_log'],
+            'level': 'DEBUG'
+        }
+    }
+}
 
 WSGI_APPLICATION = 'tracery.wsgi.application'
 
@@ -184,6 +210,7 @@ STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 AWS_DEFAULT_ACL = None
 
 GOOGLE_KEY = "AIzaSyC24MIKKYi7s8lxwgTlAHe0wGaMiZeAhRY"
+
 
 RABBITMQ_USERNAME = "rabbitadmin"
 RABBITMQ_PASSWORD = "bJYNuU4bEGwubtQqFZ89"
