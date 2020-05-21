@@ -132,7 +132,6 @@ class VenueSearch(APIView):
 
 
 class CustomUserUpdate(APIView):
-    permission_classes = [IsAuthenticated]
     def get(self, request):
         db_logger.info(request.META)
         if not supported_version(request):
