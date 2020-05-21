@@ -25,6 +25,8 @@ from .utils import get_coordinates, supported_version, update_location
 from pytz import timezone
 import dateutil.parser
 import pytz
+import logging
+db_logger = logging.getLogger('db')
 
 class VenueList(APIView):
     """
@@ -132,6 +134,7 @@ class VenueSearch(APIView):
 class CustomUserUpdate(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
+        db_logger.info(request.META)
         if not supported_version(request):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         user = request.user
