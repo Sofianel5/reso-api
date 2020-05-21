@@ -18,7 +18,7 @@ def getCoordinatesFromRequest(request):
     ip = get_client_ip(request)
     g = GeoIP2()
     lat, lng = g.lat_lon(ip)
-    coordinates = Coordinates.objects.get_or_create(lat=lat, lng=lng)
+    coordinates, _ = Coordinates.objects.get_or_create(lat=lat, lng=lng)
     return coordinates
 
 def distanceInMetersFromCoordinates(lat1, lat2, lng1, lng2):
