@@ -62,7 +62,7 @@ class Address(models.Model):
         GOOGLE_KEY = settings.GOOGLE_KEY
         try:
             request = requests.get(f"https://maps.googleapis.com/maps/api/geocode/json?address={self.__str__()}&key={GOOGLE_KEY}")
-            db_logger.info(response)
+            db_logger.info(request)
             response = dict(request.json())
             coordinates = response['results'][0]['geometry']['location']
             obj, _ = Coordinates.objects.get_or_create(lat=coordinates['lat'], lng=coordinates['lng'])

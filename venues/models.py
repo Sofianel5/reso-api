@@ -37,15 +37,10 @@ class Venue(models.Model):
     def __str__(self):
         return self.title
     def save(self, *args, **kwargs):
-        db_logger.info("STUFF")
-        db_logger.info(self.coordinates)
         if self.coordinates is None:
-            db_logger.info("coordinates is none")
             self.coordinates = self.address.to_coordinates()
         elif self.address is None:
-            db_logger.info("coordinates is not none")
             self.address = self.coordinates.to_address()
-        db_logger.info(self.coordinates)
         tf = TimezoneFinder()
         latitude, longitude = (self.coordinates.lat, self.coordinates.lng)
         timezone = tf.timezone_at(lng=longitude, lat=latitude)
