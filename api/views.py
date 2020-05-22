@@ -184,7 +184,7 @@ class VenueScanManager(APIView):
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         registered = False
-        timeslots = venue.get_current_timeslots()
+        timeslots = venue.current_timeslots()
         for timeslot in timeslots:
             if to in timeslot.attendees.all():
                 registered = True 
