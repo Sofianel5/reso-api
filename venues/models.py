@@ -37,6 +37,7 @@ class Venue(models.Model):
     def __str__(self):
         return self.title
     def save(self, *args, **kwargs):
+        db_logger.info("STUFF")
         db_logger.info(self.coordinates)
         if self.coordinates is None:
             db_logger.info("coordinates is none")
