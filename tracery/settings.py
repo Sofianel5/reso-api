@@ -223,8 +223,14 @@ EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
+from kombu.utils.url import safequote
 
-BROKER_URL = "sqs://AKIA2GVI5VXV2NXOGGMI:3g8/blI1WY/VAbhrPvTsN1u7h9HtIdgzQdEAlE98@"
+aws_access_key = safequote("AKIA2GVI5VXV2NXOGGMI")
+aws_secret_key = safequote("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")
+
+BROKER_URL = "sqs://{aws_access_key}:{aws_secret_key}@".format(
+    aws_access_key=aws_access_key, aws_secret_key=aws_secret_key,
+)
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

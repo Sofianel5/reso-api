@@ -16,3 +16,4 @@ pycurl
 celery
 django-celery-email
 sendgrid
+kombu
