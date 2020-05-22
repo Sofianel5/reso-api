@@ -22,7 +22,7 @@ class Coordinates(models.Model):
             lng2 = float(other.lng) * math.pi / 180
             dlng = abs(lng1 - lng2)
             dlat = abs(lat1 - lat2)
-            a = math.sin(dlat/2)**2 + math.cos(self.lat) * math.cos(other.lat) * math.sin(dlng/2)**2
+            a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng/2)**2
             c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
             R = 6371000
             return R * c
