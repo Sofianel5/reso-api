@@ -10,6 +10,7 @@ class Config():
 def get_coordinates(request, fieldname="coordinates"):
     try:
         lat, lng = (request.META['HTTP_LAT'], request.META["HTTP_LNG"])
+        assert(lat != "" and lng != "")
         coords, _ = Coordinates.objects.get_or_create(lat=lat, lng=lng)
         return coords
     except Exception as e:
