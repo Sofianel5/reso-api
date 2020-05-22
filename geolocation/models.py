@@ -15,13 +15,13 @@ class Coordinates(models.Model):
     def __str__(self):
         return "{'lat': " + str(self.lat) + ", 'lng': " + str(self.lng) + "}" 
     def distance(self, other):
-        print(other)
-        self.lat = self.lat * math.pi / 180
-        other.lat = other.lat * math.pi / 180
-        self.lng = self.lng * math.pi / 180
-        other.lng = other.lng * math.pi / 180
-        dlng = abs(self.lng - other.lng)
-        dlat = abs(self.lat - other.lat)
+        db_logger.info(other)
+        lat1 = self.lat * math.pi / 180
+        lat2 = other.lat * math.pi / 180
+        lng1 = self.lng * math.pi / 180
+        lng2 = other.lng * math.pi / 180
+        dlng = abs(lng1 - lng2)
+        dlat = abs(lat1 - lat2)
         a = math.sin(dlat/2)**2 + math.cos(self.lat) * math.cos(other.lat) * math.sin(dlng/2)**2
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
         R = 6371000
