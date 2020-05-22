@@ -241,3 +241,5 @@ BROKER_TRANSPORT_OPTIONS = {
 }
 
 EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+
+DEFAULT_FROM_EMAIL = "users@tracery.us"
