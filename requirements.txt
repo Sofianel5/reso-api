@@ -13,4 +13,7 @@ geopy
 requests
 geo
 geoip2
+pycurl
+celery
+django-celery-email
 sendgrid

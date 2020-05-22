@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'djoser',
     'localflavor',
     'django_db_logger',
+    'djcelery_email'
 ]
 
 MIDDLEWARE = [
@@ -222,3 +223,17 @@ EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
+
+BROKER_URL = "sqs://"
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_DEFAULT_QUEUE = 'taskbroker'
+CELERY_RESULT_BACKEND = None
+
+BROKER_TRANSPORT_OPTIONS = {
+    'region': 'us-east-1',
+    'polling_interval': 20,
+}
+
+EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
