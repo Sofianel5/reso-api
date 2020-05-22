@@ -16,12 +16,10 @@ class Coordinates(models.Model):
         return "{'lat': " + str(self.lat) + ", 'lng': " + str(self.lng) + "}" 
     def distance(self, other):
         try:
-            db_logger.info(other)
-            db_logger.info(other.lat)
-            lat1 = self.lat * math.pi / 180
-            lat2 = other.lat * math.pi / 180
-            lng1 = self.lng * math.pi / 180
-            lng2 = other.lng * math.pi / 180
+            lat1 = float(self.lat) * math.pi / 180
+            lat2 = float(other.lat) * math.pi / 180
+            lng1 = float(self.lng) * math.pi / 180
+            lng2 = float(other.lng) * math.pi / 180
             dlng = abs(lng1 - lng2)
             dlat = abs(lat1 - lat2)
             a = math.sin(dlat/2)**2 + math.cos(self.lat) * math.cos(other.lat) * math.sin(dlng/2)**2
