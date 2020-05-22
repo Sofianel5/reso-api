@@ -20,3 +20,4 @@ Backend:
     - Redis/celery event handler (done)
     - Reset password (done)
     - captcha for password reset form
+    - Fix IAM (esp on sqs)
