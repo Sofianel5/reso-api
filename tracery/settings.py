@@ -217,9 +217,9 @@ RABBITMQ_USERNAME = "rabbitadmin"
 RABBITMQ_PASSWORD = "bJYNuU4bEGwubtQqFZ89"
 
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'resousers@tracery.us'
+EMAIL_HOST_PASSWORD = "T9_+uRv6)EC]k~N4hd+,WsS:D"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
