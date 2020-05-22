@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['23.22.177.127', '127.0.0.1', 'api.tracery.us']
 # Application definition
 
 INSTALLED_APPS = [
+    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storages',
-    'users.apps.UsersConfig',
     'venues.apps.VenuesConfig',
     'geolocation.apps.GeolocationConfig',
     'api.apps.ApiConfig',
