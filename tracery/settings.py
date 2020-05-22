@@ -223,10 +223,8 @@ EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-from kombu.utils.url import safequote
-
-aws_access_key = safequote("AKIA2GVI5VXV2NXOGGMI")
-aws_secret_key = safequote("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")
+aws_access_key = "AKIA2GVI5VXV2NXOGGMI"
+aws_secret_key = "3g8%2FblI1WY%2FVAbhrPvTsN1u7h9HtIdgzQdEAlE98"
 
 BROKER_URL = "sqs://{aws_access_key}:{aws_secret_key}@".format(
     aws_access_key=aws_access_key, aws_secret_key=aws_secret_key,
