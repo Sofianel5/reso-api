@@ -15,7 +15,6 @@ urlpatterns = [
     path("me/scan/", views.UserScanManager.as_view()),
     path("venues/<int:pk>/scan/", views.VenueScanManager.as_view()),
     path("me/registrations/", views.UserBookingsManager.as_view()),
-    path("fixtures/", views.Fixture.as_view()),
     path("myadmin/", views.VenueAdminLogin.as_view()),
     path("myadmin/venues/<int:pk>/timeslots/", views.VenueAdminTimeSlotInfo.as_view()),
 ]
