@@ -22,9 +22,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from geolocation.models import Coordinates, Address
 from .utils import get_coordinates, supported_version, update_location
-from pytz import timezone
 import dateutil.parser
-import pytz
 import logging
 db_logger = logging.getLogger('db')
 
@@ -62,14 +60,9 @@ class TimeSlotManager(APIView):
     def get(self, request, pk):
         venue = Venue.objects.get(pk=pk)
         time_slots = venue.time_slots.all()
-        coordinates = get_coordinates(request)
-        local = timezone(coordinates.to_timezone())
-        utc = pytz.utc
-        now = utc.localize(datetime.now()).astimezone(local)
         available_slots = []
+        now = datetime.now()
         for time_slot in time_slots:
-            time_slot.start = utc.localize(time_slot.start).astimezone(local)
-            time_slot.stop = utc.localize(time_slot.stop).astimezone(local)
             if time_slot.stop > now:
                 available_slots.append(time_slot)
         serializer = TimeSlotSerializer(available_slots, many=True)
@@ -81,15 +74,10 @@ class TimeSlotManager(APIView):
             assert(request.user == venue.admin)
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        utc = pytz.utc 
         local = timezone(get_coordinates(request).to_timezone())
         params = {}
         params['start'] = dateutil.parser.parse(request.POST.get('start')[0])
         params['stop'] = dateutil.parser.parse(request.POST.get('stop')[0])
-        params['start'] = local.normalize(local.localize(params['start']))
-        params['stop'] = local.normalize(local.localize(params['stop']))
-        params['start'] = params['start'].astimezone(utc).replace(tzinfo=None)
-        params['stop'] = params['stop'].astimezone(utc).replace(tzinfo=None)
         params["max_attendees"] = request.POST.get("max_attendees")
         params['venue'] = venue
         time_slot = TimeSlot.objects.create(**params)
@@ -246,41 +234,6 @@ class VenueAdminTimeSlotInfo(APIView):
         }
         return Response(res)
         
-class Fixture(APIView):
-    def get(self, request):
-        if request.GET["type"] == "thread":
-            record = HandshakeRequestFromVenue.objects.all()[0]
-            serializer = HandshakeRequestFromVenueSerializer(record)
-        if "venue" in request.GET["type"]:
-            record = Venue.objects.all()[0]
-            if request.GET["type"] == "venue":
-                serializer = VenueSerializer(record)
-            if request.GET["type"] == "venue_small":
-                serializer = VenueSerializer(record)
-            if request.GET["type"] == "venue_detail":
-                serializer = VenueDetailSerializer(record)
-        if "user" in request.GET["type"]:
-            record = Account.objects.all()[0]
-            if request.GET["type"] == "user_signup":
-                serializer = UserRegistrationSerializer(record)
-            if request.GET["type"] == "user_external":
-                serializer = ExternalAccountSerializer(record)
-            if request.GET["type"] == "user_internal":
-                serializer = InternalAccountSerializer(record)
-        if request.GET["type"] == "handshake":
-            record = PeerToVenueHandshake.objects.all()[0]
-            serializer = PeerToVenueHandshakeSerializer(record)
-        if request.GET["type"] == "timeslot":
-            record = TimeSlot.objects.all()[0]
-            serializer = TimeSlotSerializer(record)
-        if request.GET["type"] == "address":
-            record = Address.objects.all()[0]
-            serializer = AddressSerializer(record)
-        if request.GET["type"] == "coordinates":
-            record = Coordinates.objects.all()[0]
-            serializer = CoordinatesSerializer(record)
-        return Response(serializer.data)
-
 
 
 

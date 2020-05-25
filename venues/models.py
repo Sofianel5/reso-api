@@ -84,24 +84,10 @@ class TimeSlot(models.Model):
 
     @property 
     def current(self):
-        utc = pytz.utc
-        now = utc.localize(datetime.now())
-        try:
-            start = utc.localize(self.start)
-        except:
-            start = self.start
-        try:
-            stop = utc.localize(self.stop)
-        except:
-            stop = self.stop
-        return start < now and stop > now
+        now = datetime.now()
+        return self.start < now and self.stop > now
     
     @property
     def past(self):
-        utc = pytz.utc
-        now = utc.localize(datetime.now())  
-        try:
-            stop = utc.localize(self.stop)
-        except:
-            stop = self.stop
-        return stop < now
+        now = datetime.now()
+        return self.stop < now
