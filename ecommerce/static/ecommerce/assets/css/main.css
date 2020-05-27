@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 @import url(fontawesome-all.min.css);
+=======
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+>>>>>>> 8f96de482198730e5727324d3c06418d60b7f634
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,400italic,600italic|Roboto+Slab:400,700");
 
 html, body, div, span, applet, object,
@@ -16,7 +20,12 @@ section, summary, time, mark, audio, video {
   padding: 0;
   border: 0;
   font-size: 100%;
+<<<<<<< HEAD
   font: inherit;
+=======
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 100;
+>>>>>>> 8f96de482198730e5727324d3c06418d60b7f634
   vertical-align: baseline; }
 
 article, aside, details, figcaption, figure,
