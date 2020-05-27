@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+<meta charset="UTF-8">
+<title>Pricing Table</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="stylesheet" href="./style.css">
+<link rel = "shortcut icon" type="image/png" href="Component 1.png">
+<style>
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,900);
+html {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  background: white;
+  background-size: 100%;
+  color: #fff;
+  font-family: 'Lato', sans-serif;
+  font-size: 100%;
+  min-height: 100%;
+  line-height: 2;
+  padding: 4em 0;
+}
+
+.container {
+  margin: 0 auto;
+  width: 90%;
+  max-width: 1200px;
+}
+
+.group:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.grid-1-5 {
+  border: 2px solid #0C3A6C;
+  min-height: 400px;
+  padding: 1.25em;
+  position: relative;
+  text-align: center;
+  transition: all .2s ease-in-out;
+}
+@media screen and (min-width: 700px) {
+  .grid-1-5 {
+    float: left;
+    width: 50%;
+  }
+  .grid-1-5:nth-child(odd) {
+    clear: left;
+  }
+}
+@media screen and (min-width: 800px) {
+  .grid-1-5 {
+    width: 33.3333333%;
+  }
+  .grid-1-5:nth-child(3n+1) {
+    clear: left;
+  }
+  .grid-1-5:nth-child(odd) {
+    clear: none;
+  }
+}
+@media screen and (min-width: 1120px) {
+  .grid-1-5 {
+    width: 20%;
+  }
+  .grid-1-5:nth-child(odd), .grid-1-5:nth-child(3n+1) {
+    clear: none;
+  }
+}
+
+.grid-1-5:hover {
+  background: linear-gradient(50deg, #00b6ff, #00ffa2)
+  background-size: 100%;
+  border-top: 2px solid #FF0000;
+  border-bottom: 2px solid #FF0000;
+  border-left: 2px solid #FF0000;
+  border-right: 2px solid #FF0000;
+  box-shadow: 0px 0px 10px 0px #ffffff;
+  transform: scale(1.025);
+  z-index: 2;
+}
+.grid-1-5:hover:before, .grid-1-5:hover:after {
+  background color: white;  
+  content: "";
+  position: absolute;
+  *zoom: 1;
+  background-size: 100%;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+}
+.grid-1-5:hover:before {
+  left: -2px;
+}
+.grid-1-5:hover:after {
+  right: -2px;
+}
+.grid-1-5:hover .button {
+  background-color: #FF0000;
+  *zoom: 1;
+
+  background-size: 100%;
+}
+
+h1{
+	text-align: center;
+	color:black;
+}
+
+h2, h3, p, ul {
+  margin: 0;
+  color: black;
+}
+
+h2 {
+  font-size: 1em;
+  font-weight: 400;
+  margin: 0 0 0.5em;
+}
+
+h3 {
+  font-size: 1.5em;
+  letter-spacing: 0.0625em;
+  margin: 0 0 0.3333333333333333em;
+}
+
+p {
+  font-size: 0.875em;
+}
+
+p, ul {
+  margin: 0 0 1.5em;
+}
+
+ul {
+  color: black;
+  font-size: 1.1em;
+  list-style-type: none;
+  padding: 0;
+}
+ul li {
+  margin: 0 0 0.8333333333333333em;
+}
+
+.button {
+  background-color: #FF0000;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 1em;
+  font-weight: 700;
+  padding: 0.75em 1.5em;
+  position: absolute;
+  bottom: 1.25em;
+  left: 50%;
+  margin-left: -60px;
+  text-decoration: none;
+  width: 120px;
+}
+
+.uppercase, .button, h2 {
+  text-transform: uppercase;
+}
+
+sup, .small {
+  font-size: 0.6125em;
+}
+</style>
+</head>
+<body>
+<div class = "header">
+	<h1>Reso Checkout</h1>
+</div>
+<div class="container group">
+		<div class="grid-1-5">
+			<h2>Small Shop</h2>
+			<h3><sup>$</sup>9.99<span class="small">/week</span></h3>
+			<ul>
+				<li><75 Daily Scans</li>
+				<li>1 Account</li>
+				<li>24/7 Support</li>
+			</ul>
+			<a href="" class="button">Sign Up</a>
+		</div>
+		<div class="grid-1-5">
+			<h2>Shop</h2>
+			<h3><sup>$</sup>19.99<span class="small">/week</span></h3>
+			<ul>
+				<li>75-150 Daily Scans</li>
+				<li>1 Account</li>
+				<li>24/7 Support</li>
+			</ul>		
+			<a href="" class="button">Sign Up</a>	
+		</div>
+		<div class="grid-1-5">
+			<h2>Store</h2>
+			<h3><sup>$</sup>29.99<span class="small">/week</span></h3>
+			<ul>
+				<li>150-300 Daily Scans</li>
+				<li>1 Account</li>
+				<li>24/7 Support</li>
+			</ul>	
+			<a href="" class="button">Sign Up</a>		
+		</div>
+		<div class="grid-1-5">
+			<h2>Supermarket</h2>
+			<h3><sup>$</sup>39.99<span class="small">/week</span></h3>
+			<ul>
+				<li>300-500 Daily Scans</li>
+				<li>1-2 Accounts</li>
+				<li>24/7 Support</li>
+			</ul>	
+			<a href="" class="button">Sign Up</a>		
+		</div>
+		<div class="grid-1-5">
+			<h2>Enterprise</h2>
+			<h3><sup>$</sup>49.99(min)<span class="small">/week</span></h3>
+			<ul>
+				<li>500+ Daily Scans</li>
+				<li>2+ Accounts</li>
+				<li>24/7 Support</li>
+			</ul>
+			<a href="" class="button">Get a Quote</a>
+		</div>		
+	</div>
+  
+</body>
+</html>
