@@ -1,0 +1,23 @@
+APP:
+    - Add more detailed profile view (done)
+    - Make history screen nicer (done)
+    - Make timeslotcard nicer (done)
+    - test different screen sizes, on android  (done)
+    - Internationalizations (done)
+    - Allow for special types of users (Frontline, Elderly) (done)
+    - Timeslot card for different types of users  (done)
+    - Error handling (done)
+    - Linked through navigaton (done)
+    - Caching (done)
+    - Disposes to prevent memory leaks (done)
+Backend:
+    - More fallbacks if geolocation doesn't work (done)
+    - Find possible breakpoints and create fallbacks
+    - Make sure timezones are properly being conveyed and calculated 
+    - Eldery, frontline users & timeslots 
+    - Error handling (done)
+    - Caching 
+    - Redis/celery event handler (done)
+    - Reset password (done)
+    - captcha for password reset form
+    - Fix IAM (esp on sqs)
