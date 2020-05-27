@@ -19,4 +19,4 @@ def signup(request):
 
 @login_required
 def choose_subscription(request):
-    return render(request, "ecommerce/subscriptions.html")
+    return render(request, "ecommerce/pricing.html")
