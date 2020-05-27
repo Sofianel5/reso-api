@@ -13,64 +13,83 @@
     <meta charset="utf-8" />
   </head>
 
-  <body>
+  <!-- Editable table -->
+<div class="card">
+  <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Welcome {% username %}</h3>
+  <div class="card-body">
+    <div id="table" class="table-editable">
+      <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success"><i
+            class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
+      <table class="table table-bordered table-responsive-md table-striped text-center">
+        <thead>
+          <tr>
+            <th class="text-center">Business Name</th>
+            <td class="pt-3-half" contenteditable="true">Business Name</td>
+          </tr>
+          <tr>
 
-  <div>
-                              <table id="user" class="table table-bordered table-striped">
-                                  <tbody>
-                                      <tr>
-                                          <td width="30%">Business Name</td>
-                                          <td><a href="#" id="Business Name" data-type="text" data-pk="1" data-name="username" data-original-title="Enter username" class="editable">Business Name</a></td>
+            <th class="text-center">Address Line 1</th>
+            <td class="pt-3-half" contenteditable="true"> Address Line 1</td>
+          <tr>
 
-                                      </tr>
-                                      <tr>
-                                          <td>Address Line 1 </td>
-                                          <td><a href="#" id="Address1" data-type="text" data-pk="1" data-name="address1" data-placement="right" data-placeholder="Required" data-original-title="Enter your firstname" class="editable"> Address Line 1</a></td>
+            <th class="text-center">Address Line 2</th>
+            <td class="text-center" contenteditable="true">Address Line 2</td>
+            </tr>
 
-                                      </tr>
-                                      <tr>
-                                          <td>Address Line 2 </td>
-                                          <td><a href="#" id="Address1" data-type="text" data-pk="1" data-name="address2" data-placement="right" data-placeholder="Required" data-original-title="Enter your firstname" class="editable"> Address Line 1</a></td>
+            <tr>
+              <th class="text-center">Zip Code</th>
+              <td class="text-center" contenteditable="true">Zip Code</td>
+          </tr>
 
-                                      </tr>
-                                      <tr>
-                                          <td>Phone Number</td>
-                                          <td><a href="#" id="Address1" data-type="text" data-pk="1" data-name="phonenumber" data-placement="right" data-placeholder="Required" data-original-title="Enter your firstname" class="editable"> Address Line 1</a></td>
+          <tr>
+            <th class="text-center">Business Desctiption</th>
+            <td class="text-center" contenteditable="true">Business Description</td>
+        </tr>
 
-                                      </tr>
-                                      <tr>
-                                          <td>Business Description </td>
-                                          <td><a href="#" id="Address1" data-type="text" data-pk="1" data-name="businessdescription" data-placement="right" data-placeholder="Required" data-original-title="Enter your firstname" class="editable"> Address Line 1</a></td>
+          <tr>
+            <th class="text-center">City</th>
+            <td class="text-center" contenteditable="true">City</td>
+        </tr>
 
-                                      </tr>
-
-                                      <tr>
-                                          <td>City </td>
-                                          <td><a href="#" id="Address1" data-type="text" data-pk="1" data-name="city" data-placement="right" data-placeholder="Required" data-original-title="Enter your firstname" class="editable"> Address Line 1</a></td>
-
-                                      </tr>
-
-
-                                      <tr>
-                                          <td>State </td>
-                                          <td><a href="#" id="Address1" data-type="text" data-pk="1" data-name="state" data-placement="right" data-placeholder="Required" data-original-title="Enter your firstname" class="editable"> Address Line 1</a></td>
-
-                                      </tr>
-
-                                      <tr>
-                                          <td>Country </td>
-                                          <td><a href="#" id="Address1" data-type="text" data-pk="1" data-name="country" data-placement="right" data-placeholder="Required" data-original-title="Enter your firstname" class="editable"> Address Line 1</a></td>
-
-                                      </tr>
-
+        <tr>
+          <th class="text-center">State</th>
+          <td class="text-center contenteditable="true""><select class="form-control" id="exampleFormControlSelect1">
+            <option>NY</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select></td>
+      </tr>
 
 
+      <tr>
+        <th class="text-center">Country</th>
+        <td class="text-center contenteditable="true""><select class="form-control" id="exampleFormControlSelect1">
+          <option>NY</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select></td>
+    </tr>
 
-                                  </tbody>
-                              </table>
+
+      <tr>
+        <th class="text-center">City</th>
+        <td class="text-center">City</td>
+    </tr>
 
 
-                          </div>
+        </thead>
+        <tbody>
 
-  </body>
+        
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- Editable table -->
   </html>
