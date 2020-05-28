@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<!--
+-->
+<html>
+    <head>
+        <title>Reso</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'ecommerce/assets/css/main.css' %}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    <meta charset="utf-8" />
+  </head>
+
+  <!-- Editable table -->
+<div class="card">
+  <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Your Hours</h3>
+  <div class="card-body">
+    <div id="table" class="table-editable">
+      <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success"><i
+            class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
+      <table class="table table-bordered table-responsive-md table-striped text-center">
+        <thead>
+          <tr>
+            <th class="text-center">Monday</th>
+            <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
+  <input type="checkbox" class="custom-control-input" id="customSwitchMonday">
+  <label class="custom-control-label" for="customSwitchMonday">Closed on Monday</label>
+</div></td>
+
+          </tr>
+          <tr>
+
+            <th class="text-center">Tuesday</th>
+            <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitchTuesday">
+            <label class="custom-control-label" for="customSwitchTuesday">Closed on Tuesday</label></div></td>
+          <tr>
+
+            <th class="text-center">Wednesday</th>
+            <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
+  <input type="checkbox" class="custom-control-input" id="customSwitchWednesday">
+  <label class="custom-control-label" for="customSwitchWednesday">Closed on Wednesday</label>
+</div></td>
+            </tr>
+
+            <tr>
+            <th class="text-center">Thursday</th>
+            <td class="pt-3-half" contenteditable="true"> <input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
+  <input type="checkbox" class="custom-control-input" id="customSwitchThursday">
+  <label class="custom-control-label" for="customSwitchThursday">Closed on Thursday</label>
+</div></td>
+          </tr>
+
+          <tr>
+            <th class="text-center">Friday</th>
+            <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
+  <input type="checkbox" class="custom-control-input" id="customSwitchFriday">
+  <label class="custom-control-label" for="customSwitchFriday">Closed on Friday</label>
+</div></td>
+        </tr>
+
+          <tr>
+            <th class="text-center">Saturday</th>
+            <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
+  <input type="checkbox" class="custom-control-input" id="customSwitchSaturday">
+  <label class="custom-control-label" for="customSwitchSaturday">Closed on Saturday</label>
+</div></td>
+        </tr>
+
+        <tr>
+          <th class="text-center">Sunday</th>
+          <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="appt"
+          min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
+  <input type="checkbox" class="custom-control-input" id="customSwitchSunday">
+  <label class="custom-control-label" for="customSwitchSunday">Closed on Sunday</label>
+</div></td>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+    <table id="myTable" class=" table order-list">
+    <thead>
+        <tr>
+            <th>Special Dates (Holidays or Changed Hours)</th>
+            <td>Closed</td>
+            <td>Specific Hours</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="col-sm-4">
+            <form action="/action_page.php">
+            <input type="date" id="date" name="date">
+</form>
+            </td>
+            <td class="col-sm-4">
+                <div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" id="customSwitchClosed"><label class="custom-control-label" for="customSwitchClosed"></label>
+            </td>
+            <td class="col-sm-3">
+                <input type="time" id="appt" name="appt"min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
+            min="00:00" max="23:59" required>
+            </td>
+            <td class="col-sm-2"><a class="deleteRow"></a>
+
+            </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5" style="text-align: left;">
+                <input type="button" class="btn btn-lg btn-block " id="addrow" value="Add Row" />
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </tfoot>
+</table>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    var counter = 0;
+
+    $("#addrow").on("click", function () {
+        var newRow = $("<tr>");
+        var cols = "";
+
+        cols += '<td><form action="/action_page.php"><input type="date" id="date" '+ counter +'name="date"></td>';
+        cols += '<td><div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" id="customSwitchClosed' + counter + '"><label class="custom-control-label" for="customSwitchClosed' + counter + '"> </label></td>';
+        cols += '<td><input type="time" id="appt" name="appt"min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"' + counter + '</td>';
+
+        cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
+        newRow.append(cols);
+        $("table.order-list").append(newRow);
+        counter++;
+    });
+
+    $("table.order-list").on("click", ".ibtnDel", function (event) {
+        $(this).closest("tr").remove();       
+        counter -= 1
+    });
+});
+
+
+
+function calculateRow(row) {
+    var price = +row.find('input[name^="price"]').val();
+
+}
+
+function calculateGrandTotal() {
+    var grandTotal = 0;
+    $("table.order-list").find('input[name^="price"]').each(function () {
+        grandTotal += +$(this).val();
+    });
+    $("#grandtotal").text(grandTotal.toFixed(2));
+}
+</script>
+
+
+
+
+
+
+
+</html>
