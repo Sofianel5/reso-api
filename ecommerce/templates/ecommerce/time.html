@@ -2,11 +2,11 @@
 <!--
 -->
 <html>
-    <head>
-        <title>Reso</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" href="{% static 'ecommerce/assets/css/main.css' %}" />
+  <head>
+    <title>Hours</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'ecommerce/assets/css/main.css' %}" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -15,8 +15,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
     <meta charset="utf-8" />
   </head>
-
-  <!-- Editable table -->
 <div class="card">
   <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Your Hours</h3>
   <div class="card-body">
@@ -27,8 +25,8 @@
         <thead>
           <tr>
             <th class="text-center">Monday</th>
-            <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="appt"
-            min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
+            <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="start_time"
+            min="00:00" max="23:59" required> to <input type="time" id="appt" name="end_time"
             min="00:00" max="23:59" required><div class="custom-control custom-switch">
   <input type="checkbox" class="custom-control-input" id="customSwitchMonday">
   <label class="custom-control-label" for="customSwitchMonday">Closed on Monday</label>
@@ -139,6 +137,7 @@
         </tr>
     </tfoot>
 </table>
+<input type="submit" value="Submit">
 </div>
 
 <script type="text/javascript">
@@ -165,8 +164,6 @@
     });
 });
 
-
-
 function calculateRow(row) {
     var price = +row.find('input[name^="price"]').val();
 
@@ -180,11 +177,4 @@ function calculateGrandTotal() {
     $("#grandtotal").text(grandTotal.toFixed(2));
 }
 </script>
-
-
-
-
-
-
-
 </html>
