@@ -159,7 +159,7 @@ function myFunction(e) {
         var newRow = $("<tr>");
         var cols = "";
 
-        cols += '<td><form action="/action_page.php"><input type="date" id="date" '+ counter +'name="date"></td>';
+        cols += '<td><input type="date" id="date" '+ counter +'name="date" required="true"></td>';
         cols += '<td><div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" id="customSwitchClosed' + counter + '"><label class="custom-control-label" for="customSwitchClosed' + counter + '"> </label></td>';
         cols += '<td><input type="time" id="appt" name="appt"min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"' + counter + '</td>';
 
