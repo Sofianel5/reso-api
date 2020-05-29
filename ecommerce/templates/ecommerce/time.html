@@ -25,7 +25,7 @@
         <thead>
           <tr>
             <th class="text-center">Monday</th>
-            <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="start_time"
+            <td class="pt-3-half" ><input type="time" id="appt" name="start_time"
             min="00:00" max="23:59" required> to <input type="time" id="appt" name="end_time"
             min="00:00" max="23:59" required><div class="custom-control custom-switch">
   <input type="checkbox" class="custom-control-input" id="customSwitchMonday">
@@ -36,7 +36,7 @@
           <tr>
 
             <th class="text-center">Tuesday</th>
-            <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="appt"
+            <td class="pt-3-half" ><input type="time" id="appt" name="appt"
             min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
             min="00:00" max="23:59" required><div class="custom-control custom-switch">
             <input type="checkbox" class="custom-control-input" id="customSwitchTuesday">
@@ -44,7 +44,7 @@
           <tr>
 
             <th class="text-center">Wednesday</th>
-            <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="appt"
+            <td class="pt-3-half" ><input type="time" id="appt" name="appt"
             min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
             min="00:00" max="23:59" required><div class="custom-control custom-switch">
   <input type="checkbox" class="custom-control-input" id="customSwitchWednesday">
@@ -54,7 +54,7 @@
 
             <tr>
             <th class="text-center">Thursday</th>
-            <td class="pt-3-half" contenteditable="true"> <input type="time" id="appt" name="appt"
+            <td class="pt-3-half"> <input type="time" id="appt" name="appt"
             min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
             min="00:00" max="23:59" required><div class="custom-control custom-switch">
   <input type="checkbox" class="custom-control-input" id="customSwitchThursday">
@@ -64,7 +64,7 @@
 
           <tr>
             <th class="text-center">Friday</th>
-            <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="appt"
+            <td class="pt-3-half" ><input type="time" id="appt" name="appt"
             min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
             min="00:00" max="23:59" required><div class="custom-control custom-switch">
   <input type="checkbox" class="custom-control-input" id="customSwitchFriday">
@@ -74,7 +74,7 @@
 
           <tr>
             <th class="text-center">Saturday</th>
-            <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="appt"
+            <td class="pt-3-half" ><input type="time" id="appt" name="appt"
             min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
             min="00:00" max="23:59" required><div class="custom-control custom-switch">
   <input type="checkbox" class="custom-control-input" id="customSwitchSaturday">
@@ -84,7 +84,7 @@
 
         <tr>
           <th class="text-center">Sunday</th>
-          <td class="pt-3-half" contenteditable="true"><input type="time" id="appt" name="appt"
+          <td class="pt-3-half" ><input type="time" id="appt" name="appt"
           min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"
             min="00:00" max="23:59" required><div class="custom-control custom-switch">
   <input type="checkbox" class="custom-control-input" id="customSwitchSunday">
@@ -159,7 +159,7 @@
     });
 
     $("table.order-list").on("click", ".ibtnDel", function (event) {
-        $(this).closest("tr").remove();       
+        $(this).closest("tr").remove();
         counter -= 1
     });
 });
