@@ -27,8 +27,8 @@
           <tr>
             <th class="text-center">Monday</th>
             <td class="pt-3-half" ><input type="time" id="ms" name="ms"
-            min="00:00" max="23:59" > to <input type="time" id="mf" name="mf"
-            min="00:00" max="23:59" ><div class="custom-control custom-switch">
+            min="00:00" max="23:59" required> to <input type="time" id="mf" name="mf"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
   <input type="checkbox" class="custom-control-input" id="customSwitchMonday">
 
   <label class="custom-control-label" for="customSwitchMonday">Closed on Monday</label>
@@ -111,6 +111,22 @@ document.getElementById("fs").addEventListener("click", function(event){
 function myFunction(e) {
   e.preventDefault();
   var x = document.getElementById("frm1");
+  for (i = 0; i < x.length ;i++) {
+    //console.log(x.elements[i])
+    if(i % 3 == 0){
+      if(x.elements[i].checked){
+        x.elements[i-1].innerHTML = "";
+        x.elements[i-2].innerHTML = "";
+      }
+      else{
+        x.elements[i-1].setAttribute("required", "");
+        x.elements[i-2].setAttribute("required", "");
+      }
+
+
+    }
+  }
+  // GENERATES STRING FOR PYTHON TO USE vvvv
   var text = "";
   var i;
   for (i = 0; i < x.length ;i++) {
@@ -159,7 +175,7 @@ function myFunction(e) {
         var newRow = $("<tr>");
         var cols = "";
 
-        cols += '<td><input type="date" id="date" '+ counter +'name="date" required="true"></td>';
+        cols += '<td><input type="date" id="date" '+ counter +'name="date" required></td>';
         cols += '<td><div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" id="customSwitchClosed' + counter + '"><label class="custom-control-label" for="customSwitchClosed' + counter + '"> </label></td>';
         cols += '<td><input type="time" id="appt" name="appt"min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"' + counter + '</td>';
 

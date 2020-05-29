@@ -112,8 +112,19 @@ def generateJSON(s1, s2 = ""):
         except IndexError:
             1 + 1
         i +=1
+    ans = ans[:-1]
     print(ans)
-    return ans
+    ##ok lets json this
+    answer = "{\n"
+    for i in ans:
+        a = i.split(', ')
+        answer += a[0]
+        answer += " :'"
+        answer += a[1][:-1]
+        answer += "',\n"
+    print (answer+ "}")
+
+    return answer
 
 
 
