@@ -14,6 +14,9 @@ class SubscriptionType(models.Model):
     name = models.CharField(max_length=5, choices=SUBSCRIPTION_TYPES)
     daily_allowed_scans = models.IntegerField(blank=True, null=True)
     default_cost = models.DecimalField(max_digits=100, decimal_places=2, blank=True, null=True)
+    @property 
+    def human_readable_name(self):
+        return [i for i in SUBSCRIPTION_TYPES if i[0] == self.name][0][0]
     def __str__(self):
         return self.name + ": " + str(self.daily_allowed_scans)
 

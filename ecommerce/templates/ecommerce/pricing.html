@@ -197,11 +197,12 @@ sup, .small {
 <div class="container group">
     {% for type in types %}
 		<div class="grid-1-{{ types|length }}">
-			<h2>{{ type.name.1 }}</h2>
+			<h2>{{ type.human_readable_name }}</h2>
+
       {% if type.name != 'E' %}
 			<h3><sup>$</sup>{{ type.default_cost }}<span class="small">/week</span></h3>
       {% else %}
-      <h3><sup>$</sup>{{ type.default_cost }}(min)<span class="small">/week</span></h3>
+      <h3><sup>$</sup>49.99(min)<span class="small">/week</span></h3>
       {% endif %}
 			<ul>
         {% if type.name != 'E' %}
