@@ -5,5 +5,5 @@ urlpatterns = [
     path("signup/", signup, name="signup"),
     path("signin/", auth_views.LoginView.as_view(template_name='ecommerce/signin.html'), name="signin"),
     path("signout/", auth_views.LogoutView.as_view(), name="users/signout"),
-    path("home/", home, name="home")
+    path("/", home, name="home")
 ]

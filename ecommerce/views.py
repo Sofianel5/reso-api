@@ -4,7 +4,6 @@ from .models import *
 import stripe
 import tracery import settings
 
-# Create your views here.
 def home(request):
     return render(request, "ecommerce/homepage.html")
 
