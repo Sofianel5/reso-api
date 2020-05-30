@@ -81,38 +81,32 @@ def checkout(request):
             transaction = Transaction.objects.create()
             return redirect(reverse('success'))
         except stripe.error.CardError as e:
-                body = e.json_body
-                err = body.get('error', {})
-                messages.warning(request, f"{err.get('message')}")
-                return redirect("/")
+            body = e.json_body
+            err = body.get('error', {})
+            messages.warning(request, f"{err.get('message')}")
 
         except stripe.error.RateLimitError as e:
             # Too many requests made to the API too quickly
             messages.warning(request, "Rate limit error")
-            return redirect("/")
 
         except stripe.error.InvalidRequestError as e:
             # Invalid parameters were supplied to Stripe's API
             print(e)
             messages.warning(request, "Invalid parameters")
-            return redirect("/")
 
         except stripe.error.AuthenticationError as e:
             # Authentication with Stripe's API failed
             # (maybe you changed API keys recently)
             messages.warning(request, "Not authenticated")
-            return redirect("/")
 
         except stripe.error.APIConnectionError as e:
             # Network communication with Stripe failed
             messages.warning(request, "Network error")
-            return redirect("/")
 
         except stripe.error.StripeError as e:
             # Display a very generic error to the user, and maybe send
             # yourself an email
             messages.warning(request, "Something went wrong. You were not charged. Please try again.")
-            return redirect("/")
 
         except Exception as e:
             # send an email to ourselves
@@ -133,11 +127,5 @@ def checkout(request):
     })
     return render(request, "ecommerce/checkout.html", context)
 
-@login_required
-def pay(request):
-
-
 def success(request):
     return render(request, "ecommerce/success.html")
-
-
