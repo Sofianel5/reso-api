@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from .models import *
 from .forms import *
 import stripe
@@ -7,6 +9,7 @@ from django.contrib.auth import login
 from tracery import settings
 import logging
 db_logger = logging.getLogger('db')
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def home(request):
     return render(request, "ecommerce/homepage.html")
@@ -28,6 +31,9 @@ def signup(request):
 
 def pricing(request):
     return render(request, "ecommerce/pricing.html")
+
+def subscribe(request):
+    return render(request, "ecommerce/checkout.html")
 
 @login_required
 def choose_subscription(request):
