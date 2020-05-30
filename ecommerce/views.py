@@ -8,6 +8,7 @@ import stripe
 from django.contrib.auth import login
 from tracery import settings
 import logging
+from django.core.mail import send_mail
 db_logger = logging.getLogger('db')
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -32,12 +33,22 @@ def signup(request):
 def pricing(request):
     return render(request, "ecommerce/pricing.html")
 
+def choose_subscription(request):
+    return render(request, "ecommerce/subscriptions.html")
+
 def subscribe(request):
     return render(request, "ecommerce/checkout.html")
 
-@login_required
-def choose_subscription(request):
-    return render(request, "ecommerce/subscriptions.html")
+@login_required 
+def enterprise(request):
+    send_mail(
+        'New enterprise request',
+        'email: ' +request.user.email,
+        'users@tracery.us',
+        ['sofiane@tracery.us'],
+        fail_silently=False,
+    )
+    return render(request, "enterprise.html")
 
 @login_required 
 def checkout(request):
