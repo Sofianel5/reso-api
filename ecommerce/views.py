@@ -30,15 +30,11 @@ def signup(request):
             db_logger.info(form.errors)
     return render(request, "ecommerce/signup.html", context)
 
-def pricing(request):
+def choose_subscription(request):
     context = {
         'types': SubscriptionType.objects.all()
     }
-    db_logger.info(context)
     return render(request, "ecommerce/pricing.html", context)
-
-def choose_subscription(request):
-    return render(request, "ecommerce/pricing.html")
 
 def subscribe(request):
     return render(request, "ecommerce/checkout.html")
