@@ -13,6 +13,7 @@ class SubscriptionType(models.Model):
     )
     name = models.CharField(max_length=5, choices=SUBSCRIPTION_TYPES)
     daily_allowed_scans = models.IntegerField()
+    default_cost = models.DecimalField(max_digits=100, decimal_places=2)
     def __str__(self):
         return self.name + ": " + str(self.daily_allowed_scans)
 
