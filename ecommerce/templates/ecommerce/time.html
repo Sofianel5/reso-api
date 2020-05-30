@@ -1,0 +1,406 @@
+<!DOCTYPE HTML>
+<!--
+-->
+<html>
+  <head>
+    <title>Hours</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'ecommerce/assets/css/main.css' %}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    <meta charset="utf-8" />
+  </head>
+<form id="frm1">
+<div class="card">
+  <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Your Hours</h3>
+  <div class="card-body">
+    <div id="table" class="table-editable">
+      <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success"><i
+            class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
+      <table class="table table-bordered table-responsive-md table-striped text-center">
+        <thead>
+          <tr>
+            <th class="text-center">Monday</th>
+            <td class="pt-3-half" ><input type="time" id="ms" name="ms"
+            min="00:00" max="23:59" required> to <input type="time" id="mf" name="mf"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
+  <input type="checkbox" class="custom-control-input" id="customSwitchMonday" onclick="helper()">
+  <script>
+  counter = 0;
+  ms = document.getElementById("ms");
+  mf = document.getElementById("mf")
+  function helper(){
+    counter ++;
+    // if counter is odd that means it's a day off
+    if (counter % 2 == 1){
+      ms.value = "";
+      mf.value = "";
+      ms.required = false;
+      mf.required = false;
+      ms.type = 'hidden';
+      mf.type = 'hidden';
+
+    } else {
+      ms.required = true;
+      mf.required = true;
+      ms.type = 'time';
+      mf.type = 'time';
+    }
+
+
+  }
+  </script>
+
+  <label class="custom-control-label" for="customSwitchMonday">Closed on Monday</label>
+</div></td>
+
+          </tr>
+          <tr>
+
+            <th class="text-center">Tuesday</th>
+            <td class="pt-3-half" ><input type="time" id="ts" name="ts"
+            min="00:00" max="23:59" required> to <input type="time" id="tf" name="tf"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitchTuesday" onclick="helper1()">
+              <script>
+              counter1 = 0;
+              ts = document.getElementById("ts");
+              tf = document.getElementById("tf")
+
+              function helper1(){
+                counter1 ++;
+                // if counter is odd that means it's a day off
+                if (counter1 % 2 == 1){
+                  ts.value = "";
+                  tf.value = "";
+                  ts.required = false;
+                  tf.required = false;
+                  ts.type = 'hidden';
+                  tf.type = 'hidden';
+
+                } else {
+                  ts.required = true;
+                  tf.required = true;
+                  ts.type = 'time';
+                  tf.type = 'time';
+                }
+
+
+              }
+              </script>
+
+
+            <input type="checkbox" class="custom-control-input" id="customSwitchTuesday">
+            <label class="custom-control-label" for="customSwitchTuesday">Closed on Tuesday</label></div></td>
+          <tr>
+
+
+
+            <th class="text-center">Wednesday</th>
+            <td class="pt-3-half" ><input type="time" id="ws" name="ws"
+            min="00:00" max="23:59" required> to <input type="time" id="wf" name="wf"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="customSwitchWednesday" onclick="helper2()">
+                <script>
+                counter2 = 0;
+                ws = document.getElementById("ws");
+                wf = document.getElementById("wf")
+
+                function helper2(){
+                  counter2 ++;
+                  // if counter is odd that means it's a day off
+                  if (counter2 % 2 == 1){
+                    ws.value = "";
+                    wf.value = "";
+                    ws.required = false;
+                    wf.required = false;
+                    ws.type = 'hidden';
+                    wf.type = 'hidden';
+
+                  } else {
+                    ws.required = true;
+                    wf.required = true;
+                    ws.type = 'time';
+                    wf.type = 'time';
+                  }
+
+
+                }
+                </script>
+  <label class="custom-control-label" for="customSwitchWednesday">Closed on Wednesday</label>
+</div></td>
+            </tr>
+
+            <tr>
+            <th class="text-center">Thursday</th>
+            <td class="pt-3-half"> <input type="time" id="ths" name="ths"
+            min="00:00" max="23:59" required> to <input type="time" id="thf" name="thf"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="customSwitchThursday" onclick="helper3()">
+                <script>
+                counter3 = 0;
+                ths = document.getElementById("ths");
+                thf = document.getElementById("thf")
+
+                function helper3(){
+                  counter3 ++;
+                  // if counter is odd that means it's a day off
+                  if (counter3% 2 == 1){
+                    ths.value = "";
+                    thf.value = "";
+                    ths.required = false;
+                    thf.required = false;
+                    ths.type = 'hidden';
+                    thf.type = 'hidden';
+
+                  } else {
+                    ths.required = true;
+                    thf.required = true;
+                    ths.type = 'time';
+                    thf.type = 'time';
+                  }
+
+
+                }
+                </script>
+  <label class="custom-control-label" for="customSwitchThursday">Closed on Thursday</label>
+</div></td>
+          </tr>
+
+          <tr>
+            <th class="text-center">Friday</th>
+            <td class="pt-3-half"> <input type="time" id="frs" name="frs"
+            min="00:00" max="23:59" required> to <input type="time" id="frf" name="frf"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="customSwitchFriday" onclick="helper4()">
+                <script>
+                counter4 = 0;
+                frs = document.getElementById("frs");
+                frf = document.getElementById("frf")
+
+                function helper4(){
+                  counter4 ++;
+                  // if counter is odd that means it's a day off
+                  if (counter4 % 2 == 1){
+                    frs.value = "";
+                    frf.value = "";
+                    frs.required = false;
+                    frf.required = false;
+                    frs.type = 'hidden';
+                    frf.type = 'hidden';
+
+                  } else {
+                    frs.required = true;
+                    frf.required = true;
+                    frs.type = 'time';
+                    frf.type = 'time';
+                  }
+
+
+                }
+                </script>
+  <label class="custom-control-label" for="customSwitchFriday">Closed on Friday</label>
+</div></td>
+        </tr>
+
+          <tr>
+            <th class="text-center">Saturday</th>
+            <td class="pt-3-half"> <input type="time" id="ss" name="ss"
+            min="00:00" max="23:59" required> to <input type="time" id="sf" name="sf"
+            min="00:00" max="23:59" required><div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="customSwitchSaturday" onclick="helper5()">
+                <script>
+                counter5 = 0;
+                ss = document.getElementById("ss");
+                sf = document.getElementById("sf")
+
+                function helper5(){
+                  counter5 ++;
+                  // if counter is odd that means it's a day off
+                  if (counter5 % 2 == 1){
+                    ss.value = "";
+                    sf.value = "";
+                    ss.required = false;
+                    sf.required = false;
+                    ss.type = 'hidden';
+                    sf.type = 'hidden';
+
+                  } else {
+                    ss.required = true;
+                    sf.required = true;
+                    ss.type = 'time';
+                    sf.type = 'time';
+                  }
+
+
+                }
+                </script>
+  <label class="custom-control-label" for="customSwitchSaturday">Closed on Saturday</label>
+</div></td>
+        </tr>
+
+        <tr>
+          <th class="text-center">Sunday</th>
+          <td class="pt-3-half"> <input type="time" id="sus" name="sus"
+          min="00:00" max="23:59" required> to <input type="time" id="suf" name="suf"
+          min="00:00" max="23:59" required><div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitchSunday" onclick="helper6()">
+              <script>
+              counter6 = 0;
+              sus = document.getElementById("sus");
+              suf = document.getElementById("suf")
+
+              function helper6(){
+                counter6 ++;
+                // if counter is odd that means it's a day off
+                if (counter6 % 2 == 1){
+                  sus.value = "";
+                  suf.value = "";
+                  sus.required = false;
+                  suf.required = false;
+                  sus.type = 'hidden';
+                  suf.type = 'hidden';
+
+                } else {
+                  sus.required = true;
+                  suf.required = true;
+                  sus.type = 'time';
+                  suf.type = 'time';
+                }
+
+
+              }
+              </script>
+  <label class="custom-control-label" for="customSwitchSunday">Closed on Sunday</label>
+</div></td>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <button onclick="myFunction(event)" id="fs">Submit</button>
+    </div>
+  </div>
+</div>
+
+
+</form>
+<script>
+document.getElementById("fs").addEventListener("click", function(event){
+  event.preventDefault()
+});
+function myFunction(e) {
+  e.preventDefault();
+  var x = document.getElementById("frm1");
+  // GENERATES STRING FOR PYTHON TO USE vvvv
+  var text = "";
+  var i;
+  for (i = 0; i < x.length ;i++) {
+    if(x.elements[i].type == "checkbox"){
+      text += x.elements[i].checked;
+    }
+    else {
+      text += x.elements[i].value + ",";
+      console.log(x.elements[i].required)
+    }
+  }
+  console.log(text)
+}
+</script>
+
+<form id="hform">
+<div class="container">
+    <table id="myTable" class=" table order-list">
+    <thead>
+        <tr>
+            <th>Special Dates (Holidays or Changed Hours)</th>
+            <td>Closed</td>
+            <td>Specific Hours</td>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5" style="text-align: left;">
+                <input type="button" class="btn btn-lg btn-block " id="addrow" value="Add Row" />
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </tfoot>
+</table>
+<input type="submit" value="Submit" id="hf" onclick="myFunction2(event)">
+
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    var counter = 0;
+
+    $("#addrow").on("click", function () {
+        var newRow = $("<tr>");
+        var cols = "";
+
+        cols += '<td><input type="date" id="date" '+ counter +'name="date" required></td>';
+        cols += '<td><div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" id="customSwitchClosed' + counter + '"><label class="custom-control-label" for="customSwitchClosed' + counter + '"> </label></td>';
+
+        cols += '<td><input type="time" id="appt" name="appt"min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"' + counter + '</td>';
+        cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
+        newRow.append(cols);
+        $("table.order-list").append(newRow);
+        counter++;
+
+    });
+
+    $("table.order-list").on("click", ".ibtnDel", function (event) {
+        $(this).closest("tr").remove();
+        counter -= 1
+    });
+});
+
+function calculateRow(row) {
+    var price = +row.find('input[name^="price"]').val();
+
+}
+
+function calculateGrandTotal() {
+    var grandTotal = 0;
+    $("table.order-list").find('input[name^="price"]').each(function () {
+        grandTotal += +$(this).val();
+    });
+    $("#grandtotal").text(grandTotal.toFixed(2));
+}
+</script>
+
+
+
+</form>
+
+<script>
+document.getElementById("hf").addEventListener("click", function(event){
+  event.preventDefault()
+});
+function myFunction2(e) {
+  e.preventDefault();
+  var x = document.getElementById("hform");
+  var text = "";
+  var i;
+  for (i = 0; i < x.length ;i++) {
+    if(x.elements[i].type == "checkbox"){
+      text += x.elements[i].checked;
+    } else {
+    text += x.elements[i].value + ",";
+  }
+  }
+  console.log(text)
+}
+</script>
+
+</html>
