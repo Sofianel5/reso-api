@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import *
 import stripe
-import tracery import settings
+import tracery 
+import settings
 
 def home(request):
     return render(request, "ecommerce/homepage.html")
