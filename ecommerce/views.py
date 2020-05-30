@@ -39,6 +39,9 @@ def choose_subscription(request):
 def subscribe(request):
     return render(request, "ecommerce/checkout.html")
 
+def team(request):
+    return render(request, "ecommerce/our_team.html")
+
 @login_required 
 def enterprise(request):
     send_mail(
