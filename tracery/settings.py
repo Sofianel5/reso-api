@@ -246,4 +246,5 @@ EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 DEFAULT_FROM_EMAIL = "reso-users@tracery.us"
 
 STRIPE_SECRET_KEY = "sk_live_7yINcEkJbton07tN6RIq4f6j00XbpEyEQp"
-APPEND_SLASH = True
+
+LOGIN_URL = "/signin/"
