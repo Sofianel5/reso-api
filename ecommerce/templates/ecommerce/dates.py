@@ -129,6 +129,11 @@ def generateJSON(s1, s2 = ""):
 
 
 #generateJSON(string_example, hoho)
+def genJSON(s):
+    s = s.split('DIVIDER')
+    s0 = s[0]
+    s1 = s[1]
+    return generateJSON(s0, s1)
 
 
 

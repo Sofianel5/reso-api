@@ -1,4 +1,5 @@
 <!DOCTYPE HTML>
+<meta charset="utf-8" />
 <!--
 -->
 <html>
@@ -8,16 +9,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'ecommerce/assets/css/main.css' %}" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-    <meta charset="utf-8" />
   </head>
 <form id="frm1">
 <div class="card">
-  <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Your Hours</h3>
+  <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Your hours</h3>
   <div class="card-body">
     <div id="table" class="table-editable">
       <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success"><i
@@ -284,57 +283,12 @@
         </tbody>
       </table>
       <h3 id="demo" style="color: red; text-align:center;"> </h1>
-      <button onclick="myFunction(event)" id="fs">Submit</button>
+
     </div>
   </div>
 </div>
+<input class="hidden" value=",DIVIDER"></input>
 
-
-</form>
-<script>
-document.getElementById("fs").addEventListener("click", function(event){
-  event.preventDefault()
-});
-function myFunction(e) {
-  e.preventDefault();
-  var x = document.getElementById("frm1");
-  // GENERATES STRING FOR PYTHON TO USE vvvv
-  var text = "";
-  var i;
-  var requireds = true
-  for (i = 0; i < x.length ;i++) {
-    //console.log(x.elements[i])
-    if(x.elements[i].type == "checkbox"){
-      text += x.elements[i].checked;
-      //now let's check to see if the required functiions are fulfilled
-      if (! x.elements[i].checked ){
-        if(! x.elements[i - 1].value == "" || x.elements[i - 2].value == ""){
-          requireds = false;
-
-          //console.log(x.elements[i])
-        }
-
-      }
-
-    }
-    else {
-      text += x.elements[i].value + ",";
-
-    }
-  }
-  if (requireds){
-    document.getElementById("frm1").submit();
-  } else {
-    document.getElementById("demo").innerHTML = 'Please fill out all the required fields';
-  }
-
-}
-
-
-</script>
-
-
-<form id="hform">
 <div class="container">
     <table id="myTable" class=" table order-list">
     <thead>
@@ -357,7 +311,7 @@ function myFunction(e) {
         </tr>
     </tfoot>
 </table>
-<input type="submit" value="Submit" id="hf" onclick="myFunction2(event)">
+<input type="submit" value="Submit" id="fs" onclick="myFunction(event)">
 
 </div>
 
@@ -370,9 +324,9 @@ function myFunction(e) {
         var cols = "";
 
         cols += '<td><input type="date" id="date" '+ counter +'name="date" required></td>';
-        cols += '<td><div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" id="customSwitchClosed' + counter + '"><label class="custom-control-label" for="customSwitchClosed' + counter + '"> </label></td>';
+        cols += '<td><div class="custom-control custom-switch"><input type="checkbox" class="custom-control-input" id="customSwitchClosed' + counter + '" required="false"><label class="custom-control-label" for="customSwitchClosed' + counter + '"> </label></td>';
 
-        cols += '<td><input type="time" id="appt" name="appt"min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt"' + counter + '</td>';
+        cols += '<td><input type="time" id="appt" name="appt"min="00:00" max="23:59" required> to <input type="time" id="appt" name="appt' + counter + '""></td>';
         cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
         newRow.append(cols);
         $("table.order-list").append(newRow);
@@ -405,23 +359,68 @@ function calculateGrandTotal() {
 </form>
 
 <script>
-document.getElementById("hf").addEventListener("click", function(event){
+
+document.getElementById("fs").addEventListener("click", function(event){
   event.preventDefault()
 });
-function myFunction2(e) {
+function myFunction(e) {
   e.preventDefault();
-  var x = document.getElementById("hform");
+  var x = document.getElementById("frm1");
+  // GENERATES STRING FOR PYTHON TO USE vvvv
   var text = "";
   var i;
+  var requireds = true
   for (i = 0; i < x.length ;i++) {
+    //console.log(x.elements[i])
     if(x.elements[i].type == "checkbox"){
       text += x.elements[i].checked;
-    } else {
-    text += x.elements[i].value + ",";
+      //now let's check to see if the required functiions are fulfilled
+      if (! x.elements[i].checked){
+        if(! x.elements[i].id.includes("Closed")){
+          if(! x.elements[i - 1].value == "" || x.elements[i - 2].value == ""){
+
+          requireds = false;
+          console.log(x.elements[i])
+        }
+
+          //console.log(x.elements[i])
+        } else {
+          if(x.elements[i + 1].value == "" || x.elements[i + 2].value == "" || x.elements[i - 1].value == ""){
+            requireds = false
+            console.log(x.elements[i])
+            console.log(x.elements[i + 1].value== "")
+            console.log(x.elements[i + 2].value== "")
+            console.log(x.elements[i - 1].value== "")
+            //console.log(x.elements[i - 1])
+
+          }
+        }
+
+      }
+
+    }
+    else {
+      text += x.elements[i].value + ",";
+
+    }
   }
+  if (requireds){
+    document.getElementById("demo").innerHTML = '';
+    console.log(text)
+    //document.getElementById("frm1").submit();
+  } else {
+    console.log(text)
+    document.getElementById("demo").innerHTML = 'Please fill out all the required fields';
   }
 
 }
+
+
 </script>
+
+
+
+
+
 
 </html>
