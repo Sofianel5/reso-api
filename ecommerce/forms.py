@@ -13,13 +13,6 @@ class UserRegisterForm(UserCreationForm):
         model = Account
         fields = ['first_name', 'last_name', 'email', 'password1', 'password2']
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        name = self.cleaned_data.get('name')
-        if email and Account.objects.filter(email=email).exists():
-            raise forms.ValidationError(u'Email addresses must be unique.')
-        return email
-
 class VenueCreationForm(forms.ModelForm):
     class Meta:
         model = Venue
