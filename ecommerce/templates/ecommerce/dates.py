@@ -136,7 +136,7 @@ def genJSON(s):
     return generateJSON(s0, s1)
 
 
-
+print(genJSON(",,true,,true,,true,,true,,true,,true,,true,DIVIDER,2020-06-01,false12:22,12:23,Delete,2020-06-08,true,,Delete,Add Row,Submit,"))
 
 #def generateJSON(s1, s2=""):
     #string ans = ""
