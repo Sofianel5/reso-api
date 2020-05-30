@@ -60,19 +60,28 @@ def enterprise(request):
 @login_required 
 def checkout(request):
     publickey = settings.STRIPE_PUBLISHABLE_KEY
-    context = {}
+    context = {
+        'form': CheckoutForm()
+    }
     if request.method == "GET":
         subscription = SubscriptionType.objects.get(name=request.GET["name"])
     else:
         try:
+            context['form'] = CheckoutForm(request.POST)
             token = request.POST['stripeToken']
             subscription = SubscriptionType.objects.get(name=request.POST["name"])
             charge = stripe.Charge.create(
-                amount=subscription.cost,
+                amount=subscription.default_cost,
                 currency='usd',
                 description=str(subscription),
                 source=token
             )
+            subscriptionRecord = Subscription.objects.create(
+                type=subscription,
+                user=request.user,
+                term_length=request.POST["term_length"]
+            )
+            transaction = Transaction.objects.create()
             return redirect(reverse('success'))
         except:
             context["failure"] = True
@@ -82,4 +91,8 @@ def checkout(request):
         'STRIPE_PUBLISHABLE_KEY': publickey
     })
     return render(request, "ecommerce/checkout.html", context)
+
+def success(request):
+    return render(request, "ecommerce/success.html")
+
 
