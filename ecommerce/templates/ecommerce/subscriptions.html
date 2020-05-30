@@ -5,7 +5,7 @@
 <title>Pricing Table</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <link rel="stylesheet" href="./style.css">
-<link rel = "shortcut icon" type="image/png" href="Component1.png">
+<link rel = "shortcut icon" type="image/png" href="{% url 'ecommerce/images/Component1.png' %}">
 </head>
 <body>
 <div class="container group">
@@ -17,7 +17,7 @@
 				<li>1 Account</li>
 				<li>24/7 Support</li>
 			</ul>
-			<a href="{% url 'signup' %}" class="button">Sign Up</a>
+			<a href="{% url 'subscribe' %}" class="button">Go</a>
 		</div>
 		<div class="grid-1-5">
 			<h2>Shop</h2>
@@ -27,7 +27,7 @@
 				<li>1 Account</li>
 				<li>24/7 Support</li>
 			</ul>		
-			<a href="" class="button">Sign Up</a>	
+			<a href="{% url 'subscribe' %}" class="button">Gp</a>	
 		</div>
 		<div class="grid-1-5">
 			<h2>Store</h2>
@@ -37,7 +37,7 @@
 				<li>1 Account</li>
 				<li>24/7 Support</li>
 			</ul>	
-			<a href="" class="button">Sign Up</a>		
+			<a href="{% url 'subscribe' %}" class="button">Go</a>		
 		</div>
 		<div class="grid-1-5">
 			<h2>Supermarket</h2>
@@ -47,7 +47,7 @@
 				<li>1-2 Accounts</li>
 				<li>24/7 Support</li>
 			</ul>	
-			<a href="" class="button">Sign Up</a>		
+			<a href="{% url 'subscribe' %}" class="button">Go</a>		
 		</div>
 		<div class="grid-1-5">
 			<h2>Enterprise</h2>
@@ -57,7 +57,7 @@
 				<li>2+ Accounts</li>
 				<li>24/7 Support</li>
 			</ul>
-			<a href="" class="button">Sign Up</a>
+			<a href="{% url 'enterprise' %}" class="button">Get in touch</a>
 		</div>		
 	</div>
   

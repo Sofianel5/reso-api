@@ -11,7 +11,7 @@ class UserRegisterForm(UserCreationForm):
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder': "Last name", 'required':'required'}))
     class Meta:
         model = Account
-        fields = ['first_name', 'last_name' 'email', 'password1', 'password2']
+        fields = ['first_name', 'last_name', 'phone', 'email', 'password1', 'password2']
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -23,3 +23,4 @@ class UserRegisterForm(UserCreationForm):
 class VenueCreationForm(forms.ModelForm):
     class Meta:
         model = Venue
+        fields = ['type', 'description', 'title', 'address', '']

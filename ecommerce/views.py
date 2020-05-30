@@ -7,6 +7,7 @@ import tracery import settings
 # Create your views here.
 def home(request):
     return render(request, "ecommerce/homepage.html")
+
 def signup(request):
     context = {}
     if request.method == "GET":
