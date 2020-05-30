@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django_db_logger',
     'djcelery_email',
     'django_countries',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
