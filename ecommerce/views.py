@@ -4,6 +4,8 @@ from .models import *
 from .forms import *
 import stripe
 from tracery import settings
+import logging
+db_logger = logging.getLogger('db')
 
 def home(request):
     return render(request, "ecommerce/homepage.html")
@@ -19,6 +21,8 @@ def signup(request):
             user = form.save()
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return HttpResponseRedirect(reverse('home')) # redirect to success: sell or buy
+        else:
+            db_logger.info(form.errors)
     return render(request, "ecommerce/signup.html", context)
 
 def pricing(request):
