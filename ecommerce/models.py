@@ -9,7 +9,7 @@ class SubscriptionType(models.Model):
         ("M", "Medium"),
         ("L", "Large"),
         ("XL", "Extra large"),
-        ("C", "Custom")
+        ("E", "Enterprise")
     )
     name = models.CharField(max_length=5, choices=SUBSCRIPTION_TYPES)
     daily_allowed_scans = models.IntegerField()
