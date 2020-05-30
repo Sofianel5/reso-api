@@ -43,7 +43,7 @@ def runStringDays(txt):
 
 runStringDays(string_example)
 
-hoho = "2020-06-02,true,,Delete,2020-06-09,false14:10,16:10,Delete,Add Row,Submit,"
+hoho = "2020-05-30,true14:55,14:59,Delete,Add Row,Submit,"
 
 def runStringH(txt):
     #let's get rid of add and Submit
@@ -128,7 +128,8 @@ def generateJSON(s1, s2 = ""):
 
 
 
-generateJSON(string_example, hoho)
+#generateJSON(string_example, hoho)
+
 
 
 
