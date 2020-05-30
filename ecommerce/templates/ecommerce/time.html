@@ -95,7 +95,7 @@
               </script>
 
 
-            <input type="checkbox" class="custom-control-input" id="customSwitchTuesday">
+
             <label class="custom-control-label" for="customSwitchTuesday">Closed on Tuesday</label></div></td>
           <tr>
 
@@ -283,6 +283,7 @@
         <tbody>
         </tbody>
       </table>
+      <h3 id="demo" style="color: red; text-align:center;"> </h1>
       <button onclick="myFunction(event)" id="fs">Submit</button>
     </div>
   </div>
@@ -300,18 +301,38 @@ function myFunction(e) {
   // GENERATES STRING FOR PYTHON TO USE vvvv
   var text = "";
   var i;
+  var requireds = true
   for (i = 0; i < x.length ;i++) {
+    //console.log(x.elements[i])
     if(x.elements[i].type == "checkbox"){
       text += x.elements[i].checked;
+      //now let's check to see if the required functiions are fulfilled
+      if (! x.elements[i].checked ){
+        if(! x.elements[i - 1].value == "" || x.elements[i - 2].value == ""){
+          requireds = false;
+
+          //console.log(x.elements[i])
+        }
+
+      }
+
     }
     else {
       text += x.elements[i].value + ",";
-      console.log(x.elements[i].required)
+
     }
   }
-  console.log(text)
+  if (requireds){
+    document.getElementById("frm1").submit();
+  } else {
+    document.getElementById("demo").innerHTML = 'Please fill out all the required fields';
+  }
+
 }
+
+
 </script>
+
 
 <form id="hform">
 <div class="container">
@@ -399,7 +420,7 @@ function myFunction2(e) {
     text += x.elements[i].value + ",";
   }
   }
-  console.log(text)
+
 }
 </script>
 
