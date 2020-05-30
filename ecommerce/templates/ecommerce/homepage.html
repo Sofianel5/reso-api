@@ -5,15 +5,15 @@
 		<title>Reso</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../../static/ecommerce/assets/css/main.css" />
-		<link rel = "shortcut icon" type="image/png" href="Component 1.png">
+		<link rel="stylesheet" href="{% static 'ecommerce/assets/css/main.css' %}" />
+		<link rel="shortcut icon" type="image/png" href="{% static 'ecommerce/images/Component1.png' %}">
 	</head>
 	<body class="is-preload">
 			<div id="wrapper">
 					<div id="main">
 						<div class="inner">
 								<header id="header">
-									<a class = "logo"><strong><img src="Component 1.png" alt="logo.png" width="39vw" height="60vw"></strong> </a>
+									<a class = "logo"><strong><img src="{% static 'ecommerce/images/Component1.png' %}" alt="logo.png" width="39vw" height="60vw"></strong> </a>
 									<ul class="icons">
 										<li><a href="signin.html" ><span class="button">Sign in</span></a></li>
 										<li><a href="signup.html" ><span class="button">Sign up</span></a></li>
@@ -32,7 +32,7 @@
 										</ul>
 									</div>
 									<span class="image object">
-										<img src="../../static/ecommerce/images/pic10.jpg" alt="Reso app iPhone" />
+										<img src="{% static 'ecommerce/images/pic10.jpg' %}" alt="Reso app iPhone" />
 									</span>
 								</section>
 
@@ -81,11 +81,13 @@
 								</section></div>
 					</div>
 			</div>
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+
+		<!-- Scripts -->
+			<script src="{% static 'ecommerce/assets/js/jquery.min.js' %}"></script>
+			<script src="{% static 'ecommerce/assets/js/browser.min.js' %}"></script>
+			<script src="{% static 'ecommerce/assets/js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'ecommerce/assets/js/util.js' %}"></script>
+			<script src="{% static 'ecommerce/assets/js/main.js' %}"></script>
 
 	</body>
 </html>

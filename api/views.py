@@ -74,7 +74,6 @@ class TimeSlotManager(APIView):
             assert(request.user == venue.admin)
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        local = timezone(get_coordinates(request).to_timezone())
         params = {}
         params['start'] = dateutil.parser.parse(request.POST.get('start')[0])
         params['stop'] = dateutil.parser.parse(request.POST.get('stop')[0])

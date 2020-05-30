@@ -1,5 +1,6 @@
 from django import forms
-from .models import Account
+from users.models import *
+from venues.models import *
 from django.contrib.auth.forms import UserCreationForm
 
 class UserRegisterForm(UserCreationForm):
@@ -18,3 +19,7 @@ class UserRegisterForm(UserCreationForm):
         if email and Account.objects.filter(email=email).exclude(name=name).exists():
             raise forms.ValidationError(u'Email addresses must be unique.')
         return email
+
+class VenueCreationForm(forms.ModelForm):
+    class Meta:
+        model = Venue
