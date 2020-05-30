@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -5,7 +6,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{% static 'ecommerce/assets/css/main.css' %}" />
-		<link rel="stylesheet" href="../../static/ecommerce/assets/css/main.css" />
+		<!-- <link rel="stylesheet" href="../../static/ecommerce/assets/css/main.css" /> -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<link rel="shortcut icon" type="image/png" href="{% static 'ecommerce/images/Component1.png' %}">
 	</head>
@@ -14,9 +15,9 @@
 					<div id="main">
 						<div class="inner">
 								<header id="header">
-								<!--	<a class = "logo"><strong><img src="{% static 'ecommerce/images/Component1.png' %}" alt="logo.png" width="39vw" height="60vw"></strong> </a> -->
-								<a class = "logo"><strong><img src="../../static/ecommerce/images/Component1.png" alt="logo.png" width="39vw" height="60vw" style="position:relative; top:-15px;"></strong> </a>
-								
+								<a class = "logo"><strong><img src="{% static 'ecommerce/images/Component1.png' %}" alt="logo.png" width="39vw" height="60vw"></strong> </a>
+							 <!--	<a class = "logo"><strong><img src="../../static/ecommerce/images/Component1.png" alt="logo.png" width="39vw" height="60vw" style="position:relative; top:-15px;"></strong> </a> -->
+
 									<ul class="icons">
 										<li><a href="{% url 'our_team' %}" ><span class="btn btn-lg btn-outline-primary">Our team</span></a></li>
 										<li><a href="{% url 'signin' %}" ><span class="btn btn-lg btn-outline-primary">Sign in</span></a></li>
