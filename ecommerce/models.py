@@ -44,4 +44,4 @@ class Transaction(models.Model):
     def __str__(self):
         return self.order_id 
     class Meta:
-        ordering = ['-timestamp']
+        ordering = ['-date_created']
