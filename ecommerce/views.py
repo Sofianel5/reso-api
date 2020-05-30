@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import *
 import stripe
+from django.contrib.auth import login
 from tracery import settings
 import logging
 db_logger = logging.getLogger('db')
