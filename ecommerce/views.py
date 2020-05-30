@@ -22,7 +22,6 @@ def signup(request):
 
 @login_required
 def choose_subscription(request):
-<<<<<<< HEAD
     return render(request, "ecommerce/subscriptions.html")
 
 @login_required 
@@ -50,6 +49,4 @@ def checkout(request):
         'STRIPE_PUBLISHABLE_KEY': publickey
     })
     return render(request, "ecommerce/checkout.html", context)
-=======
-    return render(request, "ecommerce/pricing.html")
->>>>>>> 5747a838b6555f53be1ce73bb7e95dc4dc157c4e
+

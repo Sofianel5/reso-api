@@ -7,7 +7,7 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link rel="stylesheet" href="{% static 'ecommerce/assets/css/main.css' %}" />
 		<link href="https://fonts.googleapis.com/css?family=Montserrat:100" rel="stylesheet">
-        <link rel = "shortcut icon" type="image/png" href="Component 1.png">
+        <link rel = "shortcut icon" type="image/png" href="{% url 'Component1.png' %}">
 
 <style>
 .register{
@@ -133,7 +133,7 @@
 <div class="container register">
         <div class="row">
             <div class="col-md-3 register-left">
-                <img src="thelogo.png" alt=""/>
+                <img src="{% static 'ecommerce/images/thelogo.png' %}" alt=""/>
                 <h3 style="color:black">Reso</h3>
                 <h4 style="color:black">Reopen Right</p>
             </div>

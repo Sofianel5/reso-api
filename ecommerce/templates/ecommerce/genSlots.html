@@ -7,7 +7,7 @@
 		<title>Reso</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../../static/ecommerce/assets/css/main.css" />
+		<link rel="stylesheet" href="{% static 'ecommerce/assets/css/main.css' %}" />
 	</head>
 	<body class="is-preload">
 
@@ -22,8 +22,8 @@
 								<header id="header">
 									<a class = "logo"><strong><img src="Component 1.png" alt="logo.png" width="39vw" height="60vw"></strong> </a>
 									<ul class="icons">
-										<li><a href="venuehome.html" ><span class="button">Change Data</span></a></li>
-										<li><a href="pricing.html" ><span class="button">Change Subscription</span></a></li>
+										<li><a href="{% url 'venuehome' %}" ><span class="button">Change Data</span></a></li>
+										<li><a href="{% url 'changesubscription' %}" ><span class="button">Change Subscription</span></a></li>
 
 									</ul>
 								</header>
@@ -37,10 +37,10 @@
 										</header>
 										<p> Generate time slots for your business automatically with our built in feature. We will automaticaly generate time slots any day of the week for you, if you just complete the questionare below</p>
 										<ul class="actions">
-											<li><a href="time.html" class="button big">Let's begin</a></li>
+											<li><a href="{% url 'time' %}" class="button big">Let's begin</a></li>
 										</ul>
 									</div>
 									<span class="image object">
-										<img src="Component2.png" style="border: 5px solid #f56a6a;" alt="Reso app iPhone" />
+										<img src="{% static 'ecommerce/images/Component2.png' %}" style="border: 5px solid #f56a6a;" alt="Reso app iPhone" />
 									</span>
 								</section>
