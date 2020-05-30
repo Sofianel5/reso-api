@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from .models import *
+import stripe
+import tracery import settings
 
 # Create your views here.
 def home(request):
@@ -20,3 +23,29 @@ def signup(request):
 @login_required
 def choose_subscription(request):
     return render(request, "ecommerce/subscriptions.html")
+
+@login_required 
+def checkout(request):
+    publickey = settings.STRIPE_PUBLISHABLE_KEY
+    context = {}
+    if request.method == "GET":
+        subscription = SubscriptionType.objects.get(pk=request.GET["type"])
+    else:
+        try:
+            token = request.POST['stripeToken']
+            subscription = SubscriptionType.objects.get(pk=request.POST["type"])
+            charge = stripe.Charge.create(
+                amount=subscription.cost,
+                currency='usd',
+                description=str(subscription),
+                source=token
+            )
+            return redirect(reverse('success'))
+        except:
+            context["failure"] = True
+            return redirect(reverse('failure'))
+    context.update({
+        'subscription': subscription,
+        'STRIPE_PUBLISHABLE_KEY': publickey
+    })
+    return render(request, "ecommerce/checkout.html", context)

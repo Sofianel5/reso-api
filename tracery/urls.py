@@ -17,9 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from venues.views import 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/", include("api.urls")),
     path("users/", include("users.urls")),
+    path("venues/", include("venues.urls")),
+    path("", include("ecommerce.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
