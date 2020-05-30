@@ -9,6 +9,6 @@ urlpatterns = [
     path("signout/", auth_views.LogoutView.as_view(), name="users/signout"),
     path("", views.home, name="home"),
     path("subscriptions/", views.choose_subscription, name="subscriptions"),
-    path("checkout/", views.subscribe, name="subscribe"),
+    path("checkout/", views.subscribe, name="checkout"),
     path("enterprise/", views.enterprise, name="enterprise")
 ]

@@ -2,6 +2,8 @@ from django import forms
 from users.models import *
 from venues.models import *
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django_countries.fields import CountryField
+from django_countries.widgets import CountrySelectWidget
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'autocomplete':'off'}))
@@ -17,7 +19,24 @@ class SignInForm(AuthenticationForm):
     username = forms.EmailField(widget=forms.EmailInput(attrs={'autocomplete':'off', 'class':'form-control', 'placeholder': "Email"}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder': "Password", 'required':'required'}))
 
+class CheckoutForm(forms.Form):
+    PAYMENT_CHOICES = (
+        ('S', 'Stripe'),
+    )
+    billing_address = forms.CharField(required=False)
+    billing_address2 = forms.CharField(required=False)
+    billing_country = CountryField(blank_label='(select country)').formfield(
+        required=False,
+        widget=CountrySelectWidget(attrs={
+            'class': 'custom-select d-block w-100',
+        }))
+    billing_zip = forms.CharField(required=False)
+
+    payment_option = forms.ChoiceField(
+        widget=forms.RadioSelect, choices=PAYMENT_CHOICES)
+
 class VenueCreationForm(forms.ModelForm):
     class Meta:
         model = Venue
         fields = ['type', 'description', 'title', 'address', 'phone', 'email']
+

@@ -214,7 +214,7 @@ sup, .small {
 			</ul>		
       <div class="center-row-flex" style="width: 100%">
         {% if type.name != 'E' %}
-        <a href="" class="button">Continue</a>	
+        <a href="{% url 'checkout' %}?name={{ type.name }}" class="button">Continue</a>	
         {% else %}
         <a href="{% url 'enterprise' %}" class="button">Get a quote</a>	
         {% endif %}

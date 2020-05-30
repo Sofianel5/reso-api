@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'djoser',
     'localflavor',
     'django_db_logger',
-    'djcelery_email'
+    'djcelery_email',
+    'django_countries',
 ]
 
 MIDDLEWARE = [

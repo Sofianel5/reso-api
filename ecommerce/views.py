@@ -55,11 +55,11 @@ def checkout(request):
     publickey = settings.STRIPE_PUBLISHABLE_KEY
     context = {}
     if request.method == "GET":
-        subscription = SubscriptionType.objects.get(pk=request.GET["type"])
+        subscription = SubscriptionType.objects.get(name=request.GET["name"])
     else:
         try:
             token = request.POST['stripeToken']
-            subscription = SubscriptionType.objects.get(pk=request.POST["type"])
+            subscription = SubscriptionType.objects.get(name=request.POST["name"])
             charge = stripe.Charge.create(
                 amount=subscription.cost,
                 currency='usd',

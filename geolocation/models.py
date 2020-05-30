@@ -59,6 +59,7 @@ class Address(models.Model):
     post_code = USZipCodeField()
     city = models.CharField(_("City"), max_length=64)
     state = models.CharField(_("State"), max_length=2, choices=US_STATES)
+    country = modles.
     def __str__(self):
         return f"{self.address_1} {self.address_2} {self.city}, {self.state}, {self.post_code}"
     def to_coordinates(self):

@@ -21,3 +21,5 @@ Backend:
     - Reset password (done)
     - captcha for password reset form
     - Fix IAM (esp on sqs)
+    - Internationalizations addresses
+    - Show errors on login/signup
