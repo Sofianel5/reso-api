@@ -9,6 +9,7 @@ from django.contrib.auth import login
 from tracery import settings
 import logging
 from django.core.mail import send_mail
+from django.contrib import messages
 db_logger = logging.getLogger('db')
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
