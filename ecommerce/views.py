@@ -34,7 +34,7 @@ def pricing(request):
     return render(request, "ecommerce/pricing.html")
 
 def choose_subscription(request):
-    return render(request, "ecommerce/subscriptions.html")
+    return render(request, "ecommerce/pricing.html")
 
 def subscribe(request):
     return render(request, "ecommerce/checkout.html")
@@ -48,7 +48,7 @@ def enterprise(request):
         ['sofiane@tracery.us'],
         fail_silently=False,
     )
-    return render(request, "enterprise.html")
+    return render(request, "ecommerce/enterprise.html")
 
 @login_required 
 def checkout(request):
