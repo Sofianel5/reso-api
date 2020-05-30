@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'storages',
     'venues.apps.VenuesConfig',
     'geolocation.apps.GeolocationConfig',
+    'ecommerce.apps.EcommerceConfig',
     'api.apps.ApiConfig',
     'rest_framework', 
     'rest_framework.authtoken',
