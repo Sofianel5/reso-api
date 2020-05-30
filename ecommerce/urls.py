@@ -1,6 +1,6 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
-from . import views as ecommerce_views
+import .views as ecommerce_views
 
 urlpatterns = [
     path("signup/", auth_views.signup, name="signup"),
