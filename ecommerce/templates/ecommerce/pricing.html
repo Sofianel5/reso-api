@@ -165,7 +165,6 @@ ul li {
   left: 50%;
   margin-left: -60px;
   text-decoration: none;
-  width: 120px;
 }
 
 .uppercase, .button, h2 {
@@ -174,6 +173,22 @@ ul li {
 
 sup, .small {
   font-size: 0.6125em;
+}
+.center-row-flex {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: row;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    -webkit-justify-content: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-box-align: center;
+    align-items: center;
 }
 </style>
 </head>
@@ -230,7 +245,9 @@ sup, .small {
 				<li>2+ Accounts</li>
 				<li>24/7 Support</li>
 			</ul>
-			<a href="" class="button">Get a Quote</a>
+      <div class="center-row-flex" style="width: 100%">
+        <a href="" class="button">Get a Quote</a>
+      </div>
 		</div>		
 	</div>
   
