@@ -17,5 +17,6 @@ urlpatterns = [
     path("me/registrations/", views.UserBookingsManager.as_view()),
     path("myadmin/", views.VenueAdminLogin.as_view()),
     path("myadmin/venues/<int:pk>/timeslots/", views.VenueAdminTimeSlotInfo.as_view()),
+    path("myadmin/venues/<int:pk>/timeslots/<int:timeslotId>/", views.DeleteTimeSlot.as_view())
 ]
 

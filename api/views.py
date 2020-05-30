@@ -232,9 +232,16 @@ class VenueAdminTimeSlotInfo(APIView):
             "current": TimeSlotSerializer(current, many=True).data,
         }
         return Response(res)
-        
-
-
-
-
-
+    
+class DeleteTimeSlot(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, pk, timeslotId):
+        user = request.user
+        venue = Venue.objects.get(pk=pk)
+        try:
+            assert(venue.admin == user)
+        except:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        timeslot = TimeSlot.objects.get(pk=timeslotId)
+        timeslot.delete()
+        return Response(status=status.HTTP_200_OK)

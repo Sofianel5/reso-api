@@ -24,6 +24,7 @@ class Subscription(models.Model):
     type = models.ForeignKey(SubscriptionType, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(Account, related_name="subscriptions", on_delete=models.DO_NOTHING)
     date_created = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=False)
     TERM_LENGTHS = (
         ("1w", "1 week"),
         ("1m", "1 month"),
@@ -38,6 +39,7 @@ class Subscription(models.Model):
     def __str__(self):
         return str(self.user) + " Subscription"
 
+
 class Transaction(models.Model):
     subscription = models.ForeignKey(Subscription, related_name="transactions", on_delete=models.DO_NOTHING)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -49,3 +51,65 @@ class Transaction(models.Model):
         return self.order_id 
     class Meta:
         ordering = ['-date_created']
+
+class Coupon(models.Model):
+    code = models.CharField(max_length=15)
+    amount = models.FloatField(null=True, blank=True)
+    percent_off = models.FloatField(null=True, blank=True)
+
+    @property
+    def is_amount(self):
+        return self.amount is not None
+
+    def __str__(self):
+        return self.code
+
+class Order(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.DO_NOTHING)
+    ref_code = models.CharField(max_length=20, blank=True, null=True)
+    subscription = models.ForeignKey(Subscription, on_delete=models.DO_NOTHING)
+    start_date = models.DateTimeField(auto_now_add=True)
+    ordered_date = models.DateTimeField()
+    ordered = models.BooleanField(default=False)
+    billing_address = models.ForeignKey(
+        'Address', related_name='billing_address', on_delete=models.SET_NULL, blank=True, null=True
+    )
+    payment = models.ForeignKey(
+        'Transaction', on_delete=models.SET_NULL, blank=True, null=True)
+    coupon = models.ForeignKey(
+        'Coupon', on_delete=models.SET_NULL, blank=True, null=True)
+    being_delivered = models.BooleanField(default=False)
+    received = models.BooleanField(default=False)
+    refund_requested = models.BooleanField(default=False)
+    refund_granted = models.BooleanField(default=False)
+
+    '''
+    1. Item added to cart
+    2. Adding a billing address
+    (Failed checkout)
+    3. Payment
+    (Preprocessing, processing, packaging etc.)
+    4. Being delivered
+    5. Received
+    6. Refunds
+    '''
+
+    def __str__(self):
+        return self.user.username
+
+    def get_total(self):
+        total = 0
+        for order_item in self.items.all():
+            total += order_item.get_final_price()
+        if self.coupon:
+            total -= self.coupon.amount
+        return total
+
+class Refund(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    reason = models.TextField()
+    accepted = models.BooleanField(default=False)
+    email = models.EmailField()
+
+    def __str__(self):
+        return f"{self.pk}"
