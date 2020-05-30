@@ -20,6 +20,9 @@ def signup(request):
             return HttpResponseRedirect(reverse('home')) # redirect to success: sell or buy
     return render(request, "ecommerce/signup.html", context)
 
+def pricing(request):
+    return render(request, "ecommerce/pricing.html")
+
 @login_required
 def choose_subscription(request):
     return render(request, "ecommerce/subscriptions.html")
