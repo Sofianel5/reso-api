@@ -1,7 +1,7 @@
 from django import forms
 from users.models import *
 from venues.models import *
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'autocomplete':'off'}))
@@ -12,6 +12,10 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = Account
         fields = ['first_name', 'last_name', 'email', 'password1', 'password2']
+
+class SignInForm(AuthenticationForm):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'autocomplete':'off'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder': "Password", 'required':'required'}))
 
 class VenueCreationForm(forms.ModelForm):
     class Meta:
