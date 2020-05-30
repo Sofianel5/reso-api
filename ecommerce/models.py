@@ -1,4 +1,6 @@
 from django.db import models
+from users.models import *
+from venues.models import * 
 
 # Create your models here.
 class SubscriptionType(models.Model):
