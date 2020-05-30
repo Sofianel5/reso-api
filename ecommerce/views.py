@@ -51,7 +51,10 @@ def enterprise(request):
         ['sofiane@tracery.us'],
         fail_silently=False,
     )
-    return render(request, "ecommerce/enterprise.html")
+    context = {
+        'user': request.user
+    }
+    return render(request, "ecommerce/enterprise.html", context)
 
 @login_required 
 def checkout(request):
