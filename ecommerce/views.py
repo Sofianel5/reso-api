@@ -34,6 +34,7 @@ def pricing(request):
     context = {
         'types': SubscriptionType.objects.all()
     }
+    db_logger.info(context)
     return render(request, "ecommerce/pricing.html", context)
 
 def choose_subscription(request):
