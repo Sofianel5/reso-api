@@ -195,6 +195,7 @@ sup, .small {
 	<h1>Reso Checkout</h1>
 </div>
 <div class="container group">
+    {{ types }}
     {% for type in types %}
 		<div class="grid-1-{{ types|length }}">
 			<h2>{{ type.name }}</h2>
