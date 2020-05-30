@@ -79,7 +79,7 @@ class TimeSlotManager(APIView):
         params['stop'] = dateutil.parser.parse(request.POST.get('stop')[0])
         params["max_attendees"] = request.POST.get("max_attendees")
         params['venue'] = venue
-        time_slot = TimeSlot.objects.create(**params)
+        time_slot = TimeSlot.objects.create(start=params['start'], stop=params['stop'], max_attendees=params["max_attendees"], venue=params['venue'])
         time_slot.save()
         return Response(status=status.HTTP_200_OK)
 

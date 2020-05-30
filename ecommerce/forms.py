@@ -25,14 +25,16 @@ class CheckoutForm(forms.Form):
     )
     billing_address = forms.CharField(required=False)
     billing_address2 = forms.CharField(required=False)
+    billing_city = forms.CharField(required=False)
     billing_state = forms.CharField(required=False)
     billing_country = CountryField(blank_label='(select country)').formfield(
         required=False,
         widget=CountrySelectWidget(attrs={
             'class': 'custom-select d-block w-100',
-        }))
+    }))
+    cupon_code = forms.CharField(required=False)
     billing_zip = forms.CharField(required=False)
-
+    ref_code = forms.CharField(required=False)
     payment_option = forms.ChoiceField(
         widget=forms.RadioSelect, choices=PAYMENT_CHOICES)
 
@@ -45,4 +47,3 @@ class VenueCreationForm(forms.ModelForm):
     class Meta:
         model = Venue
         fields = ['type', 'description', 'title', 'address', 'phone', 'email']
-

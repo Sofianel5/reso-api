@@ -39,7 +39,6 @@ class Subscription(models.Model):
     def __str__(self):
         return str(self.user) + " Subscription"
 
-
 class Transaction(models.Model):
     subscription = models.ForeignKey(Subscription, related_name="transactions", on_delete=models.DO_NOTHING)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -67,18 +66,18 @@ class Coupon(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(Account, on_delete=models.DO_NOTHING)
     ref_code = models.CharField(max_length=20, blank=True, null=True)
-    subscription = models.ForeignKey(Subscription, on_delete=models.DO_NOTHING)
-    start_date = models.DateTimeField(auto_now_add=True)
-    ordered_date = models.DateTimeField()
+    subscription_type = models.ForeignKey(SubscriptionType, on_delete=models.DO_NOTHING)
+    ordered_date = models.DateTimeField(auto_now_add=True)
     ordered = models.BooleanField(default=False)
     billing_address = models.ForeignKey(
-        'Address', related_name='billing_address', on_delete=models.SET_NULL, blank=True, null=True
+        Address, on_delete=models.SET_NULL, blank=True, null=True
     )
-    payment = models.ForeignKey(
-        'Transaction', on_delete=models.SET_NULL, blank=True, null=True)
+    transaction = models.ForeignKey(
+        Transaction, on_delete=models.SET_NULL, blank=True, null=True
+    )
     coupon = models.ForeignKey(
-        'Coupon', on_delete=models.SET_NULL, blank=True, null=True)
-    being_delivered = models.BooleanField(default=False)
+        Coupon, on_delete=models.SET_NULL, blank=True, null=True
+    )
     received = models.BooleanField(default=False)
     refund_requested = models.BooleanField(default=False)
     refund_granted = models.BooleanField(default=False)
@@ -104,6 +103,8 @@ class Order(models.Model):
         if self.coupon:
             total -= self.coupon.amount
         return total
+    class Meta:
+        ordering = ['-ordered_date']
 
 class Refund(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
