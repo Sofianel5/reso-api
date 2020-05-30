@@ -31,7 +31,10 @@ def signup(request):
     return render(request, "ecommerce/signup.html", context)
 
 def pricing(request):
-    return render(request, "ecommerce/pricing.html")
+    context = {
+        'types': SubscriptionType.objects.all()
+    }
+    return render(request, "ecommerce/pricing.html", context)
 
 def choose_subscription(request):
     return render(request, "ecommerce/pricing.html")
