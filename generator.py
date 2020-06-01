@@ -1,5 +1,5 @@
-from venues.models import TimeSlot
 import datetime
+from venues.models import TimeSlot
 
 def dayH(startt, endt, interval, venuet, mt, type1="All"):
     counter = startt
@@ -10,6 +10,9 @@ def dayH(startt, endt, interval, venuet, mt, type1="All"):
         print(temp)
         counter += datetime.timedelta(minutes = interval)
 
+def test(test):
+    print(test)
+
 
 
 def day(magic, type="All"):
@@ -19,3 +22,10 @@ def day(magic, type="All"):
 def week(list):
     for i in list:
         day(i)
+
+
+def main(args):
+    day(args)
+
+if __name__ == "__main__":
+    main()
