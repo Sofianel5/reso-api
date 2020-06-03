@@ -1,16 +1,18 @@
+import logging
+from datetime import datetime
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from users.models import Account
-from datetime import datetime, timedelta
-import uuid
 from timezonefinder import TimezoneFinder
-import pytz
+
 from geolocation.models import Coordinates, Address
-import logging
+from users.models import Account
+
 db_logger = logging.getLogger('db')
 
+
 # Create your models here.
-class Venue(models.Model): 
+class Venue(models.Model):
     VENUE_TYPES = [
         ("Resturaunt", _("Resturaunt")),
         ("Grocery", _("Grocery")),
@@ -25,7 +27,8 @@ class Venue(models.Model):
     ]
     type = models.CharField(max_length=20, choices=VENUE_TYPES)
     description = models.CharField(max_length=128, blank=True, null=True)
-    admin = models.ForeignKey("users.Account", on_delete=models.DO_NOTHING, null=True, blank=True, related_name="venues")
+    admin = models.ForeignKey("users.Account", on_delete=models.DO_NOTHING, null=True, blank=True,
+                              related_name="venues")
     title = models.CharField(max_length=50)
     coordinates = models.ForeignKey(Coordinates, null=True, blank=True, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.DO_NOTHING, null=True, related_name="venue")
@@ -35,8 +38,10 @@ class Venue(models.Model):
     email = models.EmailField(blank=True, null=True)
     capacity = models.IntegerField()
     website = models.CharField(max_length=128, blank=True, null=True)
+
     def __str__(self):
         return self.title
+
     def save(self, *args, **kwargs):
         if self.coordinates is None:
             self.coordinates = self.address.to_coordinates()
@@ -47,6 +52,7 @@ class Venue(models.Model):
         timezone = tf.timezone_at(lng=longitude, lat=latitude)
         self.timezone = timezone
         super(Venue, self).save(*args, **kwargs)
+
     def bookable_time_slots(self):
         now = datetime.now()
         timeslots = self.time_slots.filter(stop__gte=now)
@@ -56,7 +62,7 @@ class Venue(models.Model):
         now = datetime.now()
         timeslots = self.time_slots.filter(start__lte=now, stop__gte=now)
         return timeslots
-    
+
     def current_timeslot(self):
         return self.current_timeslot.all()[0]
 
@@ -84,12 +90,12 @@ class TimeSlot(models.Model):
         return self.attendees.count() + self.external_attendees
 
     def add_attendee(self, attendee):
-        assert(self.stop > datetime.now())
-        assert(attendee not in self.attendees.all())
+        assert (self.stop > datetime.now())
+        assert (attendee not in self.attendees.all())
         if self.num_attendees < self.max_attendees:
             self.attendees.add(attendee)
             self.save()
-            return True 
+            return True
         else:
             raise Exception
 
@@ -112,16 +118,16 @@ class TimeSlot(models.Model):
             self.save()
         else:
             raise Exception
-    
+
     def clear_attendees(self):
         self.attendees = 0
         self.save()
-        
-    @property 
+
+    @property
     def current(self):
         now = datetime.now()
         return self.start < now and self.stop > now
-    
+
     @property
     def past(self):
         now = datetime.now()

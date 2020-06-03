@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('ecommerce', '0002_subscriptiontype_default_cost'),
     ]
@@ -23,6 +22,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='subscriptiontype',
             name='name',
-            field=models.CharField(choices=[('S', 'Small'), ('M', 'Medium'), ('L', 'Large'), ('XL', 'Extra large'), ('E', 'Enterprise')], max_length=5),
+            field=models.CharField(
+                choices=[('S', 'Small'), ('M', 'Medium'), ('L', 'Large'), ('XL', 'Extra large'), ('E', 'Enterprise')],
+                max_length=5),
         ),
     ]
