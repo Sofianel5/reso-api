@@ -1,5 +1,5 @@
-from django.contrib import admin
 from django.urls import path, include
+
 from . import views
 
 urlpatterns = [
@@ -19,8 +19,8 @@ urlpatterns = [
     path("myadmin/venues/<int:pk>/timeslots/<int:timeslotId>/", views.DeleteTimeSlot.as_view()),
     path("myadmin/venues/<int:pk>/timeslots/", views.VenueAdminTimeSlotInfo.as_view()),
     path("myadmin/<int:pk>/help/", views.VenueContact.as_view()),
-    path("myadmin/<int:venueid>/timeslots/<int:timeslotid>/change-external-attendees/", views.ExternalAttendeeView.as_view()),
+    path("myadmin/<int:venueid>/timeslots/<int:timeslotid>/change-external-attendees/",
+         views.ExternalAttendeeView.as_view()),
     path("myadmin/<int:venueid>/timeslots/clear/", views.ClearAttendees.as_view()),
     path("myadmin/<int:venueid>/timeslots/increment/", views.AttendanceIncrement.as_view())
 ]
-

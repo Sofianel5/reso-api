@@ -1,17 +1,16 @@
-from django.db import models
-from django.contrib.auth.models import User 
-from django.utils import timezone 
-from django.contrib.auth.validators import UnicodeUsernameValidator 
-from django.utils.translation import ugettext_lazy as _ 
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager 
-from .managers import AccountManager 
-from datetime import datetime, timedelta
-from django.utils import timezone 
 import uuid
+
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import User
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
 from geolocation.models import Coordinates, Address
+from .managers import AccountManager
+
 
 class Account(AbstractBaseUser):
-    username = None 
+    username = None
     email = models.EmailField(verbose_name=_("Email"), max_length=150, unique=True)
     public_id = models.UUIDField(unique=True, default=uuid.uuid4)
     date_joined = models.DateTimeField(verbose_name=_("date joined"), auto_now_add=True)
@@ -29,23 +28,24 @@ class Account(AbstractBaseUser):
     # When they first enter into a venue, calculate a new starting value by just taking the venue's value
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name"]
+
     def __str__(self):
-        return self.first_name + " " + self.last_name 
+        return self.first_name + " " + self.last_name
 
     def has_perm(self, perm, obj=None):
-        return self.is_active 
+        return self.is_active
 
     def has_module_perms(self, app_label):
         return True
 
-    @property 
+    @property
     def full_name(self):
         return self.__str__()
-    
+
     def save(self, *args, **kwargs):
         super(Account, self).save(*args, **kwargs)
-    
-    @property 
+
+    @property
     def is_venueadmin(self):
         return self.venues.all().count() != 0
 

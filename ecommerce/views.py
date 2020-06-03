@@ -1,20 +1,25 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
-from .models import *
-from .forms import *
-import stripe
-from django.contrib.auth import login
-from tracery import settings
 import logging
-from django.core.mail import send_mail
+
+import stripe
 from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse
+
+from tracery import settings
+from .forms import *
+from .models import *
+
 db_logger = logging.getLogger('db')
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+
 def home(request):
     return render(request, "ecommerce/homepage.html")
+
 
 def signup(request):
     context = {}
@@ -26,10 +31,11 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            return HttpResponseRedirect(reverse('home')) # redirect to success: sell or buy
+            return HttpResponseRedirect(reverse('home'))  # redirect to success: sell or buy
         else:
             db_logger.info(form.errors)
     return render(request, "ecommerce/signup.html", context)
+
 
 def choose_subscription(request):
     context = {
@@ -37,14 +43,16 @@ def choose_subscription(request):
     }
     return render(request, "ecommerce/pricing.html", context)
 
+
 def team(request):
     return render(request, "ecommerce/our_team.html")
 
-@login_required 
+
+@login_required
 def enterprise(request):
     send_mail(
         'New enterprise request',
-        'email: ' +request.user.email,
+        'email: ' + request.user.email,
         'users@tracery.us',
         ['sofiane@tracery.us'],
         fail_silently=False,
@@ -54,7 +62,8 @@ def enterprise(request):
     }
     return render(request, "ecommerce/enterprise.html", context)
 
-@login_required 
+
+@login_required
 def checkout(request):
     publickey = settings.STRIPE_PUBLISHABLE_KEY
     context = {
@@ -88,6 +97,7 @@ def checkout(request):
         'STRIPE_PUBLISHABLE_KEY': publickey
     })
     return render(request, "ecommerce/checkout.html", context)
+
 
 @login_required
 def pay(request):
@@ -148,7 +158,7 @@ def pay(request):
             messages.warning(self.request, "A serious error occurred. We have been notifed.")
             send_mail(
                 'Error in processing payment',
-                'email: ' +request.user.email,
+                'email: ' + request.user.email,
                 'users@tracery.us',
                 ['sofiane@tracery.us'],
                 fail_silently=False,
@@ -161,7 +171,6 @@ def pay(request):
     })
     return render(request, "ecommerce/pay.html", context)
 
+
 def success(request):
     return render(request, "ecommerce/success.html")
-
-

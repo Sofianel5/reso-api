@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('venues', '0001_initial'),
     ]
@@ -13,7 +12,10 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='venue',
             name='type',
-            field=models.CharField(choices=[('Resturaunt', 'Resturaunt'), ('Grocery', 'Grocery'), ('Bar', 'Bars'), ('Coffee', 'Coffee'), ('Gym', 'Gym'), ('Gas', 'Gas'), ('Mail', 'Mail'), ('Laundry', 'Laundry'), ('Repair', 'Repair'), ('Beauty', 'Beauty'), ('Library', 'Library')], default='Grocery', max_length=20),
+            field=models.CharField(
+                choices=[('Resturaunt', 'Resturaunt'), ('Grocery', 'Grocery'), ('Bar', 'Bars'), ('Coffee', 'Coffee'),
+                         ('Gym', 'Gym'), ('Gas', 'Gas'), ('Mail', 'Mail'), ('Laundry', 'Laundry'), ('Repair', 'Repair'),
+                         ('Beauty', 'Beauty'), ('Library', 'Library')], default='Grocery', max_length=20),
             preserve_default=False,
         ),
     ]

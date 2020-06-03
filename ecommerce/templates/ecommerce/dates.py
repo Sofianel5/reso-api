@@ -5,28 +5,30 @@ import datetime
 string_example = "12:10,12:20,false,,true,,true,,true,,true,,true,,true,"
 startDate = datetime.date(2020, 6, 1)
 endDate = datetime.date(2020, 7, 1)
+
+
 def runStringDays(txt):
     txt = txt[:-1]
     ans = txt.split('true')
-    #print(ans)
+    # print(ans)
     for i in range(len(ans)):
         if ',,' in ans[i]:
             ans[i] = ans[i][:-2]
-            #print(ans[i])
+            # print(ans[i])
             ans[i] += ',true'
     for i in range(len(ans)):
         ans[i] = ans[i].split('false')
-    #print(ans)
+    # print(ans)
     answ = ""
-    #print (ans)
+    # print (ans)
     for i in ans:
         for j in i:
             answ += j
             answ += " "
 
     answ = answ.split(" ")
-    #print(answ)
-    hours = [0,0,0,0,0,0,0]
+    # print(answ)
+    hours = [0, 0, 0, 0, 0, 0, 0]
     for i in range(7):
         if (i == 6):
             hours[0] = answ[i]
@@ -36,20 +38,20 @@ def runStringDays(txt):
     for i in range(7):
         if (hours[i] == ',true'):
             hours[i] = "true"
-    #print(hours)
+    # print(hours)
     return hours
-
 
 
 runStringDays(string_example)
 
 hoho = "2020-05-30,true14:55,14:59,Delete,Add Row,Submit,"
 
+
 def runStringH(txt):
-    #let's get rid of add and Submit
+    # let's get rid of add and Submit
     dates = {}
     txt = txt[:-16]
-    #print(txt)
+    # print(txt)
     ans = txt.split('Delete')
     ans = ans[:-1]
     for i in range(len(ans)):
@@ -68,42 +70,40 @@ def runStringH(txt):
     return (dates)
 
 
+# runStringH(hoho)
 
 
-#runStringH(hoho)
-
-
-def generateJSON(s1, s2 = ""):
+def generateJSON(s1, s2=""):
     ans = ""
     date = startDate
     reg = runStringDays(s1)
     h = {}
     if s2 != "":
         h = runStringH(s2)
-    #print(h)
-    while(date != endDate):
+    # print(h)
+    while (date != endDate):
         if reg[date.weekday()] != 'true':
             ans += str(date)
             ans += ", "
             ans += reg[date.weekday()]
             ans += "\n"
         date = date + datetime.timedelta(1)
-        #print(date)
-    #ok now lets deal with hollidats
+        # print(date)
+    # ok now lets deal with hollidats
     ans = ans.split(",\n")
-    #print(h)
+    # print(h)
     g = len(ans)
     i = 0
-    while(i < g):
-        #print(i)
+    while (i < g):
+        # print(i)
         try:
-            #print(ans[i])
+            # print(ans[i])
             a = ans[i].split(', ')
-            #print(a[0])
-            if(a[0] in h):
+            # print(a[0])
+            if (a[0] in h):
                 if (h[a[0]] == 'true'):
                     ans.pop(i)
-                    i -=1
+                    i -= 1
                 else:
                     ans[i] = ans[i][:-11]
                     ans[i] += h[a[0]]
@@ -111,7 +111,7 @@ def generateJSON(s1, s2 = ""):
 
         except IndexError:
             1 + 1
-        i +=1
+        i += 1
     ans = ans[:-1]
     print(ans)
     ##ok lets json this
@@ -122,13 +122,12 @@ def generateJSON(s1, s2 = ""):
         answer += " :'"
         answer += a[1][:-1]
         answer += "',\n"
-    print (answer+ "}")
+    print(answer + "}")
 
     return answer
 
 
-
-#generateJSON(string_example, hoho)
+# generateJSON(string_example, hoho)
 def genJSON(s):
     s = s.split('DIVIDER')
     s0 = s[0]
@@ -136,10 +135,11 @@ def genJSON(s):
     return generateJSON(s0, s1)
 
 
-print(genJSON(",,true,,true,,true,,true,,true,,true,,true,DIVIDER,2020-06-01,false12:22,12:23,Delete,2020-06-08,true,,Delete,Add Row,Submit,"))
+print(genJSON(
+    ",,true,,true,,true,,true,,true,,true,,true,DIVIDER,2020-06-01,false12:22,12:23,Delete,2020-06-08,true,,Delete,Add Row,Submit,"))
 
-#def generateJSON(s1, s2=""):
-    #string ans = ""
-    #date = startDate
-    #while (date < endDate):
-        #date.weekday()
+# def generateJSON(s1, s2=""):
+# string ans = ""
+# date = startDate
+# while (date < endDate):
+# date.weekday()

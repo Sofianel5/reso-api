@@ -1,6 +1,6 @@
-from django.db import models
 from users.models import *
-from venues.models import * 
+from venues.models import *
+
 
 # Create your models here.
 class SubscriptionType(models.Model):
@@ -14,11 +14,14 @@ class SubscriptionType(models.Model):
     name = models.CharField(max_length=5, choices=SUBSCRIPTION_TYPES)
     daily_allowed_scans = models.IntegerField(blank=True, null=True)
     default_cost = models.DecimalField(max_digits=100, decimal_places=2, blank=True, null=True)
-    @property 
+
+    @property
     def human_readable_name(self):
         return [i for i in self.SUBSCRIPTION_TYPES if i[0] == self.name][0][1]
+
     def __str__(self):
         return self.name + ": " + str(self.daily_allowed_scans)
+
 
 class Subscription(models.Model):
     type = models.ForeignKey(SubscriptionType, on_delete=models.DO_NOTHING)
@@ -36,8 +39,10 @@ class Subscription(models.Model):
     next_renewal = models.DateTimeField()
     cost = models.DecimalField(max_digits=100, decimal_places=2)
     coupon_code = models.CharField(max_length=20)
+
     def __str__(self):
         return str(self.user) + " Subscription"
+
 
 class Transaction(models.Model):
     subscription = models.ForeignKey(Subscription, related_name="transactions", on_delete=models.DO_NOTHING)
@@ -46,10 +51,13 @@ class Transaction(models.Model):
     order_id = models.CharField(max_length=120)
     amount = models.DecimalField(max_digits=100, decimal_places=2)
     success = models.BooleanField(default=True)
+
     def __str__(self):
-        return self.order_id 
+        return self.order_id
+
     class Meta:
         ordering = ['-date_created']
+
 
 class Coupon(models.Model):
     code = models.CharField(max_length=15)
@@ -62,6 +70,7 @@ class Coupon(models.Model):
 
     def __str__(self):
         return self.code
+
 
 class Order(models.Model):
     user = models.ForeignKey(Account, on_delete=models.DO_NOTHING)
@@ -103,8 +112,10 @@ class Order(models.Model):
         if self.coupon:
             total -= self.coupon.amount
         return total
+
     class Meta:
         ordering = ['-ordered_date']
+
 
 class Refund(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)

@@ -1,6 +1,10 @@
-from django.db import models
-from users.models import PeerToVenueHandshake
 import uuid
+
+from django.db import models
+
+from users.models import PeerToVenueHandshake
+
+
 # Create your models here.
 class HandshakeRequestFromVenue(models.Model):
     _from = models.ForeignKey("venues.Venue", on_delete=models.CASCADE)
@@ -16,15 +20,15 @@ class HandshakeRequestFromVenue(models.Model):
 
     @property
     def venue(self):
-        return self._from 
-    
+        return self._from
+
     @property
     def user(self):
         return self._to
 
     def __str__(self):
         return "From(venue) " + self._from.__str__() + " to " + self._to.__str__()
-    
+
     def confirm(self):
         handshake = PeerToVenueHandshake.objects.create(venue=_from, person=_to)
         handshake.save()
