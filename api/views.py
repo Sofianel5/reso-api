@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 
 import dateutil.parser
 from django.core.mail import send_mail
-from django.http import Http404
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from rest_framework.permissions import *
@@ -22,15 +22,9 @@ class VenueList(APIView):
     List all venues, or create a new venue.
     """
 
-    def get(self, request, format=None):
-        if "page" in request.GET:
-            page = int(request.GET["page"])
-        else:
-            page = 1
-        if "n" in request.GET:
-            n = int(request.GET["n"])
-        else:
-            n = 12
+    def get(self, request, _format=None):
+        page = request.GET.get('page', 1)
+        n = request.GET.get('n', 12)
         venues = Venue.objects.all()
         user_coordinates = get_coordinates(request)
         _sorted = sorted(venues, key=lambda v: v.coordinates.distance(user_coordinates))[(page - 1) * n:+page * n]
@@ -39,21 +33,15 @@ class VenueList(APIView):
 
 
 class VenueDetail(APIView):
-    def get_object(self, pk):
-        try:
-            return Venue.objects.get(pk=pk)
-        except:
-            raise Http404
-
     def get(self, request, pk):
-        venue = self.get_object(pk)
+        venue = get_object_or_404(Venue, pk=pk)
         serializer = VenueDetailSerializer(venue)
         return Response(serializer.data)
 
 
 class TimeSlotManager(APIView):
     def get(self, request, pk):
-        venue = Venue.objects.get(pk=pk)
+        venue = get_object_or_404(Venue, pk=pk)
         time_slots = venue.time_slots.all()
         available_slots = []
         now = datetime.now()
@@ -64,16 +52,17 @@ class TimeSlotManager(APIView):
         return Response(serializer.data)
 
     def post(self, request, pk):
-        venue = Venue.objects.get(pk=pk)
+        venue = get_object_or_404(Venue, pk=pk)
         try:
             assert (request.user == venue.admin)
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        params = {}
-        params['start'] = dateutil.parser.parse(request.POST.get('start'))
-        params['stop'] = dateutil.parser.parse(request.POST.get('stop'))
-        params["max_attendees"] = request.POST.get("max_attendees")
-        params['venue'] = venue
+        params = {
+            'start': dateutil.parser.parse(request.POST.get('start')),
+            'stop': dateutil.parser.parse(request.POST.get('stop')),
+            'max_attendees': request.POST.get("max_attendees"),
+            'venue': venue
+        }
         time_slot = TimeSlot.objects.create(start=params['start'], stop=params['stop'],
                                             max_attendees=params["max_attendees"], venue=params['venue'])
         time_slot.save()
@@ -84,8 +73,8 @@ class TimeSlotRegistration(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, venue, timeslot):
-        venue = Venue.objects.get(pk=venue)
-        timeslot = TimeSlot.objects.get(pk=timeslot)
+        venue = get_object_or_404(Venue, pk=venue)
+        timeslot = get_object_or_404(TimeSlot, pk=timeslot)
         user = request.user
         try:
             assert (timeslot in venue.time_slots.all())
@@ -94,9 +83,8 @@ class TimeSlotRegistration(APIView):
         except:
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
-    def get(self, request, venue, timeslot):
-        venue = Venue.objects.get(pk=venue)
-        timeslot = TimeSlot.objects.get(pk=timeslot)
+    def get(self, request, _venue, timeslot):
+        timeslot = get_object_or_404(TimeSlot, pk=timeslot)
         user = request.user
         if user not in timeslot.attendees.all():
             return Response(status=status.HTTP_200_OK)
@@ -106,13 +94,11 @@ class TimeSlotRegistration(APIView):
 
 class VenueSearch(APIView):
     def get(self, request):
-        q = request.GET['q']
+        q = request.GET.get('q', '')
         types = Venue.objects.filter(type__contains=q)
         descs = Venue.objects.filter(description__contains=q)
         titles = Venue.objects.filter(title__contains=q)
         union = types.union(descs).union(titles)
-        user_coordinates = get_coordinates(request)
-        _sorted = sorted(union, key=lambda v: v.coordinates.distance(user_coordinates))
         serializer = VenueSerializer(union, many=True)
         return Response(serializer.data)
 
@@ -146,7 +132,7 @@ class UserScanManager(APIView):
         user = request.user
         requests = HandshakeRequestFromVenue.objects.filter(_to=user, time__gte=(datetime.now() - timedelta(minutes=5)))
         if requests.count() > 0:
-            _request = requests[len(requests) - 1]
+            _request = requests[:-1]
             thread = HandshakeRequestFromVenueSerializer(instance=_request).data
             thread["success"] = True
             return JsonResponse(thread, safe=False)
@@ -155,7 +141,6 @@ class UserScanManager(APIView):
                                 status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
-        user = request.user
         thread = HandshakeRequestFromVenue.objects.get(pk=request.POST["thread"])
         thread.confirm()
         return Response(status=status.HTTP_200_OK)
@@ -212,7 +197,7 @@ class VenueAdminLogin(APIView):
 
     def get(self, request):
         user = request.user
-        if (request.user.venues.count() != 0):
+        if request.user.venues.count() != 0:
             serialized = dict(VenueAdminSerializer(user).data)
             serialized["venue"] = serialized["venues"][0]
             return Response(serialized)
@@ -250,12 +235,12 @@ class DeleteTimeSlot(APIView):
 
     def post(self, request, pk, timeslotId):
         user = request.user
-        venue = Venue.objects.get(pk=pk)
+        venue = get_object_or_404(Venue, pk)
         try:
             assert (venue.admin == user)
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        timeslot = TimeSlot.objects.get(pk=timeslotId)
+        timeslot = get_object_or_404(TimeSlot, pk=timeslotId)
         timeslot.delete()
         return Response(status=status.HTTP_200_OK)
 
@@ -265,7 +250,7 @@ class VenueContact(APIView):
 
     def post(self, request, pk):
         user = request.user
-        venue = Venue.objects.get(pk=pk)
+        venue = get_object_or_404(Venue, pk=pk)
         try:
             assert (venue.admin == user)
         except:
@@ -285,8 +270,8 @@ class ExternalAttendeeView(APIView):
 
     def post(self, request, venueid, timeslotid):
         user = request.user
-        venue = Venue.objects.get(pk=venueid)
-        timeslot = TimeSlot.objects.get(pk=timeslotid)
+        venue = get_object_or_404(Venue, pk=venueid)
+        timeslot = get_object_or_404(TimeSlot, pk=timeslotid)
         try:
             assert (venue.admin == user)
             assert (timeslot.venue == venue)
@@ -297,7 +282,7 @@ class ExternalAttendeeView(APIView):
                 timeslot.add_external_attendee()
             else:
                 timeslot.remove_external_attendee()
-        except Exception as e:
+        except:
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
@@ -306,7 +291,7 @@ class AttendanceIncrement(APIView):
 
     def post(self, request, venueid):
         user = request.user
-        venue = Venue.objects.get(pk=venueid)
+        venue = get_object_or_404(Venue, pk=venueid)
         timeslot = venue.current_timeslot()
         try:
             assert (venue.admin == user)
@@ -321,7 +306,7 @@ class ClearAttendees(APIView):
 
     def post(self, request, venueid):
         user = request.user
-        venue = Venue.objects.get(pk=venueid)
+        venue = get_object_or_404(Venue, pk=venueid)
         timeslot = venue.current_timeslot()
         try:
             assert (venue.admin == user)
