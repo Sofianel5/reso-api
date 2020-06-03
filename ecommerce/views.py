@@ -71,9 +71,9 @@ def checkout(request):
             except Cupon.DoesNotExist:
                 cupon = None
             address = Address.objects.create(
-                address_1=context['form'].cleaned_data.get("billing_address")
-                address_1=context['form'].cleaned_data.get("billing_address2")
-                city=context['form'].cleaned_data.get("billing_city")
+                address_1=context['form'].cleaned_data.get("billing_address"),
+                address_2=context['form'].cleaned_data.get("billing_address2"),
+                city=context['form'].cleaned_data.get("billing_city"),
                 state=context['form'].cleaned_data.get("billing_state")
             )
             order = Order.objects.create(

@@ -24,6 +24,7 @@ from geolocation.models import Coordinates, Address
 from .utils import get_coordinates, supported_version, update_location
 import dateutil.parser
 import logging
+from django.core.mail import send_mail
 db_logger = logging.getLogger('db')
 
 class VenueList(APIView):
@@ -75,8 +76,8 @@ class TimeSlotManager(APIView):
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         params = {}
-        params['start'] = dateutil.parser.parse(request.POST.get('start')[0])
-        params['stop'] = dateutil.parser.parse(request.POST.get('stop')[0])
+        params['start'] = dateutil.parser.parse(request.POST.get('start'))
+        params['stop'] = dateutil.parser.parse(request.POST.get('stop'))
         params["max_attendees"] = request.POST.get("max_attendees")
         params['venue'] = venue
         time_slot = TimeSlot.objects.create(start=params['start'], stop=params['stop'], max_attendees=params["max_attendees"], venue=params['venue'])
@@ -120,7 +121,6 @@ class VenueSearch(APIView):
 
 class CustomUserUpdate(APIView):
     def get(self, request):
-        db_logger.info(request.META)
         if not supported_version(request):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         user = request.user
@@ -245,3 +245,67 @@ class DeleteTimeSlot(APIView):
         timeslot = TimeSlot.objects.get(pk=timeslotId)
         timeslot.delete()
         return Response(status=status.HTTP_200_OK)
+    
+class VenueContact(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, pk):
+        user = request.user
+        venue = Venue.objects.get(pk=pk)
+        try:
+            assert(venue.admin == user)
+        except:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        send_mail(
+            'New support request',
+            'email: ' +request.user.email + "<br>" + request.POST["content"],
+            'users@tracery.us',
+            ['sofiane@tracery.us'],
+            fail_silently=False,
+        )
+        return Response(status=status.HTTP_200_OK)
+
+class ExternalAttendeeView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, venueid, timeslotid):
+        user = request.user
+        venue = Venue.objects.get(pk=venueid)
+        timeslot = TimeSlot.objects.get(pk=timeslotid)
+        try:
+            assert(venue.admin == user)
+            assert(timeslot.venue == venue)
+        except:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            if request.POST["add"]:
+                timeslot.add_external_attendee()
+            else:
+                timeslot.remove_external_attendee()
+        except Exception as e:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE) 
+        
+class AttendanceIncrement(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, venueid):
+        user = request.user
+        venue = Venue.objects.get(pk=venueid)
+        timeslot = venue.current_timeslot()
+        try:
+            assert(venue.admin == user)
+        except:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        timeslot.record_attending(request.POST["count"])
+        return Response({"attendees": timeslot.attending})
+
+class ClearAttendees(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, venueid):
+        user = request.user
+        venue = Venue.objects.get(pk=venueid)
+        timeslot = venue.current_timeslot()
+        try:
+            assert(venue.admin == user)
+        except:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        timeslot.clear_attendees()
+        serializer = TimeSlotSerializer(timeslot)
+        return Response(serializer.data)
