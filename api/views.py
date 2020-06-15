@@ -60,13 +60,13 @@ class VenueDetail(APIView):
 class TimeSlotManager(APIView):
     def get(self, request, pk):
         venue = Venue.objects.get(pk=pk)
-        time_slots = venue.time_slots.all()
-        available_slots = []
         now = datetime.now()
+        time_slots = venue.time_slots.filter(stop__gte=now)
+        available_slots = []
         for time_slot in time_slots:
-            if time_slot.stop > now:
+            if not request.user in time_slot.attendees.all() and time_slot.is_bookable:
                 available_slots.append(time_slot)
-        serializer = TimeSlotSerializer(available_slots, many=True)
+        serializer = TimeSlotSerializer(available_slots[:20], many=True)
         return Response(serializer.data)
 
     def post(self, request, pk):
@@ -163,22 +163,26 @@ class VenueScanManager(APIView):
         venue = Venue.objects.get(pk=pk)
         to = Account.objects.get(public_id=uuid.UUID(request.POST["to"]))
         try:
-            assert(not to.is_locked)
-        except:
-            return Response(status=status.HTTP_417_EXPECTATION_FAILED)
-        try:
             assert(venue.admin == user)
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            assert(not to.is_locked)
+        except:
+            return Response(status=status.HTTP_417_EXPECTATION_FAILED)
         registered = False
         timeslots = venue.current_timeslots()
         for timeslot in timeslots:
             if to in timeslot.attendees.all():
                 registered = True 
+                timeslot.attending += 1
+                timeslot.save()
+                break
         try:
             assert(registered)
         except:
             return Response(status=status.HTTP_412_PRECONDITION_FAILED)
+        
         hs = HandshakeRequestFromVenue.objects.create(_from=venue, _to=to)
         serializer = HandshakeRequestFromVenueSerializer(hs)
         return Response(serializer.data)
@@ -276,10 +280,11 @@ class ExternalAttendeeView(APIView):
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         try:
-            if request.POST["add"]:
+            if request.POST["add"] == "true":
                 timeslot.add_external_attendee()
             else:
                 timeslot.remove_external_attendee()
+            return Response(TimeSlotSerializer(timeslot).data)
         except Exception as e:
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE) 
         
@@ -288,24 +293,21 @@ class AttendanceIncrement(APIView):
     def post(self, request, venueid):
         user = request.user
         venue = Venue.objects.get(pk=venueid)
-        timeslot = venue.current_timeslot()
         try:
             assert(venue.admin == user)
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        timeslot.record_attending(request.POST["count"])
-        return Response({"attendees": timeslot.attending})
+        venue.increment_attendees(int(request.POST["count"]))
+        return Response({"attendees": venue.get_attendee_count()})
 
 class ClearAttendees(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request, venueid):
         user = request.user
         venue = Venue.objects.get(pk=venueid)
-        timeslot = venue.current_timeslot()
         try:
             assert(venue.admin == user)
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        timeslot.clear_attendees()
-        serializer = TimeSlotSerializer(timeslot)
-        return Response(serializer.data)
+        venue.clear_attendees()
+        return Response({"attendees": venue.get_attendee_count()})

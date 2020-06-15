@@ -51,6 +51,7 @@ class PeerToVenueHandshakeSerializer(serializers.ModelSerializer):
 class TimeSlotSerializer(serializers.ModelSerializer):
     venue = TitleVenueSerializer()
     class Meta:
+        ordering = ['start']
         model = TimeSlot 
         fields = ['start', 'stop', 'max_attendees', 'num_attendees', 'id', 'current', 'past', 'venue', 'type']
         

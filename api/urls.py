@@ -20,7 +20,7 @@ urlpatterns = [
     path("myadmin/venues/<int:pk>/timeslots/", views.VenueAdminTimeSlotInfo.as_view()),
     path("myadmin/<int:pk>/help/", views.VenueContact.as_view()),
     path("myadmin/<int:venueid>/timeslots/<int:timeslotid>/change-external-attendees/", views.ExternalAttendeeView.as_view()),
-    path("myadmin/<int:venueid>/timeslots/clear/", views.ClearAttendees.as_view()),
-    path("myadmin/<int:venueid>/timeslots/increment/", views.AttendanceIncrement.as_view())
+    path("myadmin/<int:venueid>/clear/", views.ClearAttendees.as_view()),
+    path("myadmin/<int:venueid>/increment/", views.AttendanceIncrement.as_view())
 ]
 

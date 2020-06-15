@@ -12,7 +12,8 @@ db_logger = logging.getLogger('db')
 # Create your models here.
 class Venue(models.Model): 
     VENUE_TYPES = [
-        ("Resturaunt", _("Resturaunt")),
+        ("Retail", _("Retail")),
+        ("Restaurant", _("Restaurant")),
         ("Grocery", _("Grocery")),
         ("Coffee", _("Coffee")),
         ("Gym", _("Gym")),
@@ -34,9 +35,11 @@ class Venue(models.Model):
     phone = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     capacity = models.IntegerField()
+    attendee_count = models.IntegerField(default=0)
     website = models.CharField(max_length=128, blank=True, null=True)
     def __str__(self):
         return self.title
+
     def save(self, *args, **kwargs):
         if self.coordinates is None:
             self.coordinates = self.address.to_coordinates()
@@ -47,6 +50,7 @@ class Venue(models.Model):
         timezone = tf.timezone_at(lng=longitude, lat=latitude)
         self.timezone = timezone
         super(Venue, self).save(*args, **kwargs)
+
     def bookable_time_slots(self):
         now = datetime.now()
         timeslots = self.time_slots.filter(stop__gte=now)
@@ -58,8 +62,30 @@ class Venue(models.Model):
         return timeslots
     
     def current_timeslot(self):
-        return self.current_timeslot.all()[0]
-
+        ts = self.current_timeslots()
+        if (ts.count() > 0):
+            return self.current_timeslots().all()[0] 
+        return None
+    
+    def get_attendee_count(self):
+        if self.current_timeslot() != None:
+            return self.current_timeslot().attending + self.attendee_count
+        return self.attendee_count
+    
+    def clear_attendees(self):
+        if self.current_timeslot() != None:
+            self.current_timeslot().clear_attendees() 
+        self.attendee_count = 0
+        self.save()
+    
+    def increment_attendees(self, num):
+        if self.current_timeslot() != None:
+            if self.current_timeslot().attending + num >= 0:
+                self.current_timeslot().record_attending(num) 
+                return
+        if self.attendee_count + num >= 0:
+            self.attendee_count += num
+            self.save()
 
 class TimeSlot(models.Model):
     TYPES = [
@@ -104,18 +130,23 @@ class TimeSlot(models.Model):
         if self.external_attendees > 0:
             self.external_attendees -= 1
             self.save()
-        raise Exception
+        else:
+            raise Exception
 
     def record_attending(self, num):
-        if self.attending + num > 0:
+        if self.attending + num >= 0:
             self.attending += num
             self.save()
         else:
             raise Exception
     
     def clear_attendees(self):
-        self.attendees = 0
+        self.attending = 0
         self.save()
+    
+    @property
+    def is_bookable(self):
+        return self.num_attendees <= self.max_attendees
         
     @property 
     def current(self):
