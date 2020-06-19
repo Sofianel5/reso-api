@@ -8,9 +8,3 @@ def generate_between_interval(startt, endt, interval, venuet, mt, type1="All"):
         temp.save()
         print(temp)
         counter += datetime.timedelta(minutes = interval)
-
-def main(args):
-    day(args)
-
-if __name__ == "__main__":
-    main()

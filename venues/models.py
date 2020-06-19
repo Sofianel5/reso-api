@@ -36,7 +36,9 @@ class Venue(models.Model):
     email = models.EmailField(blank=True, null=True)
     capacity = models.IntegerField()
     attendee_count = models.IntegerField(default=0)
+    visit_length = models.IntegerField()
     website = models.CharField(max_length=128, blank=True, null=True)
+    visible = models.BooleanField(default=True)
     def __str__(self):
         return self.title
 
@@ -86,6 +88,9 @@ class Venue(models.Model):
         if self.attendee_count + num >= 0:
             self.attendee_count += num
             self.save()
+    
+    def generate_month(self):
+        self.schedule.generate_month()
 
 class TimeSlot(models.Model):
     TYPES = [
@@ -152,8 +157,83 @@ class TimeSlot(models.Model):
     def current(self):
         now = datetime.now()
         return self.start < now and self.stop > now
-    
+
     @property
     def past(self):
         now = datetime.now()
         return self.stop < now
+
+    def __str__(self):
+        return "%s: from %s to %s" % (str(self.venue), self.start.strftime('%m/%d %H:%M:%S'), self.stop.strftime('%m/%d %H:%M:%S'))
+
+class ScheduleDay(models.Model):
+    MONDAY = 1
+    TUESDAY = 2
+    WEDNESDAY = 3
+    THURSDAY = 4
+    FRIDAY = 5
+    SATURDAY = 6
+    SUNDAY = 7
+    DAYS = (
+        (MONDAY, "Monday"),
+        (TUESDAY, "Tuesday"),
+        (WEDNESDAY, "Wednesday"),
+        (THURSDAY, "Thursday"),
+        (FRIDAY, "Friday"),
+        (SATURDAY, "Saturday"),
+        (SUNDAY, "Sunday")
+    )
+    index = models.IntegerField(choices=DAYS)
+    start_hour = models.IntegerField()
+    start_minute = models.IntegerField()
+    stop_hour = models.IntegerField()
+    stop_minute = models.IntegerField()
+    def __str__(self):
+        return "%s, %i:%i to %i:%i" % (self.get_index_display(), self.start_hour, self.start_minute, self.stop_hour, self.stop_minute)
+
+class Schedule(models.Model):
+    weekdays = models.ManyToManyField(ScheduleDay)
+    interval_length = models.IntegerField()
+    venue = models.OneToOneField(Venue, on_delete=models.CASCADE)
+
+    def generate_continous(self, startt, endt, interval, venuet, mt, type1="All"):
+        counter = startt
+        while (counter < endt):
+            temp = TimeSlot.objects.create(venue=venuet, start=counter,stop=(counter + timedelta(minutes = interval)), max_attendees = mt, type = type1)
+            temp.save()
+            print(temp)
+            counter += timedelta(minutes = interval)
+    
+    @property 
+    def days_open(self):
+        return [day.index for day in self.weekdays.all()]
+    
+    def get_day(self, idx):
+        for day in self.weekdays.all():
+            if day.index == idx:
+                return day
+    
+    def generate(self, start, stop):
+        while (start < stop):
+            if start.weekday() + 1 in self.days_open:
+                day = self.get_day(start.weekday()+1)
+                self.generate_continous(
+                    start.replace(hour=day.start_hour, minute=day.start_minute), 
+                    start.replace(hour=day.stop_hour, minute=day.stop_hour),
+                    self.venue.visit_length,
+                    self.venue,
+                    self.venue.capacity
+                )
+            start += timedelta(days=1)
+    
+    def generate_month(self):
+        start = datetime.today()
+        stop =  start+timedelta(days=30)
+        self.generate(start, stop)
+    def __str__(self):
+        return "Schedule for %s" % (str(self.venue))
+
+
+
+    
+    

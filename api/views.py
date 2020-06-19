@@ -40,7 +40,7 @@ class VenueList(APIView):
             n = int(request.GET["n"])
         else:
             n = 12
-        venues = Venue.objects.all()
+        venues = Venue.objects.filter(visible=True)
         user_coordinates = get_coordinates(request)
         _sorted = sorted(venues, key= lambda v: v.coordinates.distance(user_coordinates))[(page-1)*n:+page*n]
         serializer = VenueSerializer(_sorted, many=True)
@@ -61,12 +61,8 @@ class TimeSlotManager(APIView):
     def get(self, request, pk):
         venue = Venue.objects.get(pk=pk)
         now = datetime.now()
-        time_slots = venue.time_slots.filter(stop__gte=now)
-        available_slots = []
-        for time_slot in time_slots:
-            if not request.user in time_slot.attendees.all() and time_slot.is_bookable:
-                available_slots.append(time_slot)
-        serializer = TimeSlotSerializer(available_slots[:20], many=True)
+        time_slots = TimeSlot.objects.filter(venue=venue, stop__gte=now)[:50]
+        serializer = TimeSlotSerializer(time_slots, many=True)
         return Response(serializer.data)
 
     def post(self, request, pk):
@@ -80,7 +76,7 @@ class TimeSlotManager(APIView):
         params['stop'] = dateutil.parser.parse(request.POST.get('stop'))
         params["max_attendees"] = request.POST.get("max_attendees")
         params['venue'] = venue
-        time_slot = TimeSlot.objects.create(start=params['start'], stop=params['stop'], max_attendees=params["max_attendees"], venue=params['venue'])
+        time_slot = TimeSlot.objects.create(start=params['start'], stop=params['stop'], max_attendees=params["max_attendees"], venue=params['venue'], type=request.POST.get("type"))
         time_slot.save()
         return Response(status=status.HTTP_200_OK)
 
@@ -223,17 +219,18 @@ class VenueAdminTimeSlotInfo(APIView):
             assert(venue.admin == user)
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        ts = venue.time_slots.all()
+        ts = venue.time_slots.all().order_by('start')
         history = []
         current = []
-        for t in ts:
+        for i, t in enumerate(ts):
             if t.past:
                 history.append(t)
             else:
-                current.append(t)
+                current += ts[i:]
+                break
         res = {
-            "history": TimeSlotSerializer(history, many=True).data,
-            "current": TimeSlotSerializer(current, many=True).data,
+            "history": TimeSlotSerializer(history[:20], many=True).data,
+            "current": TimeSlotSerializer(current[:20], many=True).data,
         }
         return Response(res)
     
@@ -261,7 +258,7 @@ class VenueContact(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         send_mail(
             'New support request',
-            'email: ' +request.user.email + "<br>" + request.POST["content"],
+            'email: ' +request.user.email + "\n" + request.POST["content"],
             'users@tracery.us',
             ['sofiane@tracery.us'],
             fail_silently=False,
