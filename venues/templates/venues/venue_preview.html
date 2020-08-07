@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ Users }} Reso Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,400i,700,700i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400i,700,700i&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'venues/css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'venues/css/animate.css' %}">
+
+    <link rel="stylesheet" href="{% static 'venues/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'venues/css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'venues/css/magnific-popup.css' %}">
+
+    <link rel="stylesheet" href="{% static 'venues/css/aos.css' %}">
+
+    <link rel="stylesheet" href="{% static 'venues/css/ionicons.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'venues/css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'venues/css/jquery.timepicker.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'venues/css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'venues/css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'venues/css/style.css' %}">
+  </head>
+  <body>
+
+
+
+
+		<!-- Start Home Section -->
+		<section id="home" class="hero-wrap js-fullheight" style="background-image: url({{ venue.image.url }});"  data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center">
+          <style>
+          .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            margin: auto;
+            text-align: center;
+          }
+
+          .title {
+            color: grey;
+            font-size: 18px;
+          }
+
+          button {
+            border: none;
+            outline: 0;
+            display: inline-block;
+            padding: 8px;
+            color: white;
+            background-color: #000;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+          }
+
+          a {
+            text-decoration: none;
+            font-size: 22px;
+            color: black;
+          }
+
+          button:hover, a:hover {
+            opacity: 0.7;
+          }
+          </style>
+
+              <!-- Add icon library -->
+           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+           <style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+}
+
+.title {
+  color: grey;
+  font-size: 18px;
+}
+
+button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+a {
+  text-decoration: none;
+  font-size: 22px;
+  color: black;
+}
+
+button:hover, a:hover {
+  opacity: 0.7;
+}
+</style>
+</head>
+<body>
+
+
+<img src="{{ venue.admin.profile_picture.url }}" alt="John" style="width:44vh; height:44vh; position:relative; left:18vw; border-radius: 10px">
+<div class="card" style="height:44vh">
+
+  <h3 style="color: black">{{ venue.title }}</h3>
+  <p>See on The Reso App</p>
+  <p>{{ venue.description }}</p>
+  <div>
+    <p><a href="https://apps.apple.com/us/app/the-reso-app/id1518156504">The Reso App on IOS</i></a></p>
+    <a href="https://play.google.com/store/apps/details?id=com.tracery.Reso">The Reso App on Android</i></a>
+  </div>
+
+
+
+</div>
+
+</body>
+</html>
+
+          </div>
+        </div>
+      </div>
+    </section>
+		<!-- End Home Section -->
+
+
+
+
+
+
+
+
+
+
+
+    <script src="{% static 'venues/js/jquery.min.js' %}"></script>
+    <script src="{% static 'venues/js/jquery-migrate-3.0.1.min.js' %}"></script>
+    <script src="{% static 'venues/js/popper.min.js' %}"></script>
+    <script src="{% static 'venues/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'venues/js/jquery.easing.1.3.js' %}"></script>
+    <script src="{% static 'venues/js/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'venues/js/jquery.stellar.min.js' %}"></script>
+    <script src="{% static 'venues/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'venues/js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'venues/js/aos.js' %}"></script>
+    <script src="{% static 'venues/js/jquery.animateNumber.min.js' %}"></script>
+    <script src="{% static 'venues/js/scrollax.min.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="{% static 'venues/js/google-map.js' %}"></script>
+    <script src="{% static 'venues/js/main.js' %}"></script>
+  </body>
+</html>

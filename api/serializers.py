@@ -55,6 +55,13 @@ class TimeSlotSerializer(serializers.ModelSerializer):
         model = TimeSlot 
         fields = ['start', 'stop', 'max_attendees', 'num_attendees', 'id', 'current', 'past', 'venue', 'type']
 
+class TimeSlotSerializerWithAttendees(serializers.ModelSerializer):
+    attendees = ExternalAccountSerializer(many=True)
+    class Meta:
+        ordering = ['start']
+        model = TimeSlot 
+        fields = ['start', 'stop', 'max_attendees', 'num_attendees', 'id', 'current', 'past', 'type', 'attendees']
+
 class InfoTimeSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlot 
@@ -64,6 +71,13 @@ class VenueDetailSerializer(serializers.ModelSerializer):
     admin = ExternalAccountSerializer()
     bookable_time_slots = InfoTimeSlotSerializer(many=True)
     #time_slots = TimeSlotSerializer(many=True)
+    class Meta:
+        model = Venue
+        fields = "__all__"
+        depth = 1
+
+class AdminListingsSerializer(serializers.ModelSerializer):
+    admin = ExternalAccountSerializer()
     class Meta:
         model = Venue
         fields = "__all__"

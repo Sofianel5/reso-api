@@ -6,13 +6,15 @@ import uuid
 from timezonefinder import TimezoneFinder
 import pytz
 from geolocation.models import Coordinates, Address
+from django.core.mail import send_mail, EmailMultiAlternatives
+from .utils import create_dynamic_link
 import logging
 db_logger = logging.getLogger('db')
 
-# Create your models here.
 class Venue(models.Model): 
     VENUE_TYPES = [
         ("Retail", _("Retail")),
+        ("Real Estate", _("Real Estate")),
         ("Restaurant", _("Restaurant")),
         ("Grocery", _("Grocery")),
         ("Coffee", _("Coffee")),
@@ -39,8 +41,18 @@ class Venue(models.Model):
     visit_length = models.IntegerField()
     website = models.CharField(max_length=128, blank=True, null=True)
     visible = models.BooleanField(default=True)
+    lead_time_hours = models.FloatField(default=0)
+    requires_form = models.BooleanField(default=False)
+    form_url = models.CharField(max_length=1000, blank=True, null=True)
+    mask_required = models.BooleanField(default=True)
+    share_link = models.URLField(max_length=200, blank=True, null=True)
+    allows_named_attendees = models.BooleanField(default=False)
+
     def __str__(self):
         return self.title
+    
+    def local_time_naive(self):
+        return datetime.now(pytz.timezone(self.timezone)).replace(tzinfo=None)
 
     def save(self, *args, **kwargs):
         if self.coordinates is None:
@@ -51,15 +63,32 @@ class Venue(models.Model):
         latitude, longitude = (self.coordinates.lat, self.coordinates.lng)
         timezone = tf.timezone_at(lng=longitude, lat=latitude)
         self.timezone = timezone
+        if self.share_link is None:
+            self.share_link = create_dynamic_link(
+                "https://api.tracery.us/venues/share/", 
+                {"venue": self.pk}, 
+                f"Book a time to visit {self.title} on The Reso App",
+                self.description,
+                self.image.url
+            )
+        if self.admin.share_link is None:
+            self.admin.share_link = create_dynamic_link(
+                "https://api.tracery.us/users/share/", 
+                {"user": self.admin.pk},
+                f"View {self.admin}'s listings on The Reso App",
+                "The Reso App is an all in one solution for in person events. The Reso App allows you to book times in advance to visit locations to save time and stay safe.",
+                self.admin.profile_picture.url
+            )
+            self.admin.save()
         super(Venue, self).save(*args, **kwargs)
 
     def bookable_time_slots(self):
-        now = datetime.now()
+        now = self.local_time_naive()
         timeslots = self.time_slots.filter(stop__gte=now)
         return timeslots
 
     def current_timeslots(self):
-        now = datetime.now()
+        now = self.local_time_naive()
         timeslots = self.time_slots.filter(start__lte=now, stop__gte=now)
         return timeslots
     
@@ -106,6 +135,7 @@ class TimeSlot(models.Model):
     attendees = models.ManyToManyField(Account, blank=True, related_name="time_slots")
     external_attendees = models.IntegerField(default=0)
     attending = models.IntegerField(default=0)
+    notes = models.TextField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         super(TimeSlot, self).save(*args, **kwargs)
@@ -113,13 +143,56 @@ class TimeSlot(models.Model):
     @property
     def num_attendees(self):
         return self.attendees.count() + self.external_attendees
+    
+    def send_user_form_email(self, attendee):
+        subject = "Form to be admitted entry to " + self.venue.title 
+        from_email = "accounts@tracery.us"
+        to_email = attendee.email 
+        text_content = f"""Hello, in order to be admitted into {self.venue.title}, the law requires you to complete this form.
+        {self.venue.form_url}
+        Please reply to this email with your completed form so that {self.venue.title} can allow you to visit.
+        Best,
+        The Reso App Team
+        """
+        html_content = f""" 
+        <h5>Hello, {attendee.full_name}</h5>
+        <p>
+        In order to be admitted into {self.venue.title}, the law requires you to complete <a href="{self.venue.form_url}">this form.</a>
+        </p>
+        <p>
+        Please reply to this email with your completed form so that {self.venue.title} can allow you to visit.
+        </p>
+        <p>
+        Best,<br>
+        The Reso App Team
+        </p>
+        """
+        message = EmailMultiAlternatives(subject, text_content, from_email, [to_email], bcc=[self.venue.admin.email], reply_to=[self.venue.admin.email])
+        message.attach_alternative(html_content, "text/html")
+        message.send(fail_silently=False)
+    
+    def send_admin_attendee_email(self, attendee):
+        subject = "Someone just registered to visit your venue"
+        from_email = "accounts@tracery.us"
+        to_email = self.venue.admin.email 
+        text_content = f"""Hello {self.venue.admin.full_name},
+The Reso App user {attendee.full_name} just registered to visit {self.venue.title} from {self.start.strftime('%m/%d %-I:%M %p')} to {self.stop.strftime('%m/%d %-I:%M %p')}.
+We emailed them the form they need to submit, and bcced you on the email. When they reply, their response will be sent to you.
+Best,
+The Reso App Team
+        """
+        message = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+        message.send()
 
     def add_attendee(self, attendee):
-        assert(self.stop > datetime.now())
+        assert(self.stop > self.venue.local_time_naive())
         assert(attendee not in self.attendees.all())
         if self.num_attendees < self.max_attendees:
             self.attendees.add(attendee)
             self.save()
+            if self.venue.requires_form:
+                self.send_user_form_email(attendee)
+                self.send_admin_attendee_email(attendee)
             return True 
         else:
             raise Exception
@@ -155,12 +228,12 @@ class TimeSlot(models.Model):
         
     @property 
     def current(self):
-        now = datetime.now()
+        now = self.venue.local_time_naive()
         return self.start < now and self.stop > now
 
     @property
     def past(self):
-        now = datetime.now()
+        now = self.venue.local_time_naive()
         return self.stop < now
 
     def __str__(self):
@@ -194,12 +267,17 @@ class ScheduleDay(models.Model):
 class Schedule(models.Model):
     weekdays = models.ManyToManyField(ScheduleDay)
     interval_length = models.IntegerField()
+    TYPES = [
+        ("All", _("All")),
+        ("Eldery", _("Elderly")),
+        ("Frontline", _("Frontline")),
+    ]
+    type = models.CharField(max_length=25, choices=TYPES, default="All")
     venue = models.OneToOneField(Venue, on_delete=models.CASCADE)
-
-    def generate_continous(self, startt, endt, interval, venuet, mt, type1="All"):
+    def generate_continous(self, startt, endt, interval, venuet, mt):
         counter = startt
         while (counter < endt):
-            temp = TimeSlot.objects.create(venue=venuet, start=counter,stop=(counter + timedelta(minutes = interval)), max_attendees = mt, type = type1)
+            temp = TimeSlot.objects.create(venue=venuet, start=counter,stop=(counter + timedelta(minutes = interval)), max_attendees = mt, type = self.type)
             temp.save()
             print(temp)
             counter += timedelta(minutes = interval)

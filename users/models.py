@@ -24,6 +24,9 @@ class Account(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     last_login = models.DateTimeField(verbose_name=_("Last login"), auto_now=True)
     is_locked = models.BooleanField(default=True)
+    bio = models.CharField(max_length=300, null=True, blank=True)
+    share_link = models.URLField(max_length=200, blank=True, null=True)
+    profile_picture = models.ImageField(default="users/theresoapp.jpg", upload_to="users")
     objects = AccountManager()
 
     # When they first enter into a venue, calculate a new starting value by just taking the venue's value

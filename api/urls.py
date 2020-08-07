@@ -11,6 +11,7 @@ urlpatterns = [
     path("venues/<int:pk>/timeslots/", views.TimeSlotManager.as_view()),
     path("venues/<int:venue>/register/<int:timeslot>/", views.TimeSlotRegistration.as_view()),
     path("venues/search/", views.VenueSearch.as_view()),
+    path("venues/ofuser/", views.UserVenues.as_view()),
     path("me/toogle-lock/", views.ToggleLockState.as_view()),
     path("me/scan/", views.UserScanManager.as_view()),
     path("venues/<int:pk>/scan/", views.VenueScanManager.as_view()),
@@ -20,7 +21,10 @@ urlpatterns = [
     path("myadmin/venues/<int:pk>/timeslots/", views.VenueAdminTimeSlotInfo.as_view()),
     path("myadmin/<int:pk>/help/", views.VenueContact.as_view()),
     path("myadmin/<int:venueid>/timeslots/<int:timeslotid>/change-external-attendees/", views.ExternalAttendeeView.as_view()),
+    path("myadmin/<int:venueid>/timeslots/<int:timeslotid>/attendees/", views.AttendeesView.as_view()),
     path("myadmin/<int:venueid>/clear/", views.ClearAttendees.as_view()),
-    path("myadmin/<int:venueid>/increment/", views.AttendanceIncrement.as_view())
+    path("myadmin/<int:venueid>/increment/", views.AttendanceIncrement.as_view()),
+    path("myadmin/<int:venueid>/timeslots/<int:timeslotid>/notes/", views.TimeSlotNotes.as_view()),
+    path("katapult/interest/", views.KatapultInterest.as_view()),
 ]
 

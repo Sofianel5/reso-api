@@ -60,9 +60,9 @@ class VenueDetail(APIView):
 class TimeSlotManager(APIView):
     def get(self, request, pk):
         venue = Venue.objects.get(pk=pk)
-        now = datetime.now()
-        time_slots = TimeSlot.objects.filter(venue=venue, stop__gte=now)[:50]
-        serializer = TimeSlotSerializer(time_slots, many=True)
+        start = venue.local_time_naive() + timedelta(hours=venue.lead_time_hours)
+        time_slots = TimeSlot.objects.filter(venue=venue, stop__gte=start).order_by('start')[:50]
+        serializer = InfoTimeSlotSerializer(time_slots, many=True)
         return Response(serializer.data)
 
     def post(self, request, pk):
@@ -92,7 +92,7 @@ class TimeSlotRegistration(APIView):
             return Response(status=status.HTTP_201_CREATED)
         except:
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-    
+
     def get(self, request, venue, timeslot):
         venue = Venue.objects.get(pk=venue)
         timeslot = TimeSlot.objects.get(pk=timeslot)
@@ -101,19 +101,36 @@ class TimeSlotRegistration(APIView):
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-        
+
 class VenueSearch(APIView):
     def get(self, request):
         q = request.GET['q']
-        types = Venue.objects.filter(type__contains=q)
-        descs = Venue.objects.filter(description__contains=q)
-        titles = Venue.objects.filter(title__contains=q)
+        types = Venue.objects.filter(type__contains=q, visible=True)
+        descs = Venue.objects.filter(description__contains=q, visible=True)
+        titles = Venue.objects.filter(title__contains=q, visible=True)
         union = types.union(descs).union(titles)
         user_coordinates = get_coordinates(request)
         _sorted = sorted(union, key= lambda v: v.coordinates.distance(user_coordinates))
         serializer = VenueSerializer(union, many=True)
         return Response(serializer.data)
 
+class UserVenues(APIView):
+    def get(self, request):
+        id = request.GET['id']
+        venues = Venue.objects.filter(admin__id=id)
+        user_coordinates = get_coordinates(request)
+        _sorted = sorted(venues, key= lambda v: v.coordinates.distance(user_coordinates))
+        serializer = AdminListingsSerializer(venues, many=True)
+        return Response(serializer.data)
+
+class AttendeesView(APIView):
+    def get(self, request, venueid, timeslotid):
+        venue = Venue.objects.get(pk=venueid)
+        time_slot = TimeSlot.objects.get(pk=timeslotid)
+        assert(time_slot in venue.time_slots.all())
+        assert(venue.admin == request.user)
+        serializer = ExternalAccountSerializer(time_slot.attendees.all())
+        return Response(serializer.data)
 
 class CustomUserUpdate(APIView):
     def get(self, request):
@@ -228,10 +245,16 @@ class VenueAdminTimeSlotInfo(APIView):
             else:
                 current += ts[i:]
                 break
-        res = {
-            "history": TimeSlotSerializer(history[:20], many=True).data,
-            "current": TimeSlotSerializer(current[:20], many=True).data,
-        }
+        if venue.allows_named_attendees:
+            res = {
+                "history": TimeSlotSerializerWithAttendees(history[:20], many=True).data,
+                "current": TimeSlotSerializerWithAttendees(current[:20], many=True).data,
+            }
+        else:   
+            res = {
+                "history": InfoTimeSlotSerializer(history[:20], many=True).data,
+                "current": InfoTimeSlotSerializer(current[:20], many=True).data,
+            }
         return Response(res)
     
 class DeleteTimeSlot(APIView):
@@ -281,7 +304,10 @@ class ExternalAttendeeView(APIView):
                 timeslot.add_external_attendee()
             else:
                 timeslot.remove_external_attendee()
-            return Response(TimeSlotSerializer(timeslot).data)
+            if venue.allows_named_attendees:
+                return Response(TimeSlotSerializerWithAttendees(timeslot).data) 
+            else:
+                return Response(InfoTimeSlotSerializer(timeslot).data)
         except Exception as e:
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE) 
         
@@ -308,3 +334,40 @@ class ClearAttendees(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         venue.clear_attendees()
         return Response({"attendees": venue.get_attendee_count()})
+
+class TimeSlotNotes(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, venueid, timeslotid):
+        user = request.user
+        venue = Venue.objects.get(pk=venueid)
+        timeslot = TimeSlot.objects.get(pk=timeslotid)
+        new_text = request.POST["notes"]
+        if venue.admin == user and timeslot.venue == venue:
+            timeslot.notes = new_text 
+            timeslot.save()
+            return Response({"notes": timeslot.notes})
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED) 
+    
+    def get(self, request, venueid, timeslotid):
+        user = request.user
+        venue = Venue.objects.get(pk=venueid)
+        timeslot = TimeSlot.objects.get(pk=timeslotid)
+        if venue.admin == user and timeslot.venue == venue:
+            if not timeslot.notes is None:
+                return Response({"notes": timeslot.notes})
+            else:
+                return Response()
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED) 
+
+class KatapultInterest(APIView):
+    def post(self, request):
+        send_mail(
+            'Katapult: Interest form',
+            'email: ' +request.POST["email"] + "\nAddress:" + request.POST["address"],
+            'routing@tracery.us',
+            ['slarbi10@stuy.edu', 'lkronman10@stuy.edu'],
+            fail_silently=False,
+        )
+        return Response()

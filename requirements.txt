@@ -74,3 +74,4 @@ virtualenv-clone==0.2.6
 virtualenvwrapper==4.8.2
 zipp==3.1.0
 supervisor
+fcm-django

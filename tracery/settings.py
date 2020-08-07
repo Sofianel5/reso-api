@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'xvamp=me)66twer&*2cc!yg(q@+r0p_j%w23x(tux@)g$7wpk%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['23.22.177.127', '127.0.0.1', 'api.tracery.us']
 
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'djcelery_email',
     'django_countries',
     'crispy_forms',
+    'fcm_django'
 ]
 
 MIDDLEWARE = [
@@ -163,7 +164,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'EST'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 
@@ -251,3 +252,9 @@ STRIPE_SECRET_KEY = "sk_live_7yINcEkJbton07tN6RIq4f6j00XbpEyEQp"
 STRIPE_PUBLISHABLE_KEY = "pk_live_WoAKr93voSTZIiGRwObj9KrJ00EBpVJRq2"
 
 LOGIN_URL = "/signin/"
+
+FCM_DJANGO_SETTINGS = {
+        "FCM_SERVER_KEY": "AAAAeuum9ZM:APA91bHTK_cMWKZiANJm4P8afKa_ge2GgWyn17HJV6n4i8gQ6TNoUxaS_Pojm1O9mKz6LTFofE77KFzssniPloDIU7YBFspDDYHFELWV5NQ5BeDgLnnVs-Eq7IZyGsfsNe8sQEA9mhJE"
+}
+
+FIREBASE_API_KEY = "AIzaSyCLQFQIsFQ5jITyCyCWXQ7ITTQMF945PmY"
