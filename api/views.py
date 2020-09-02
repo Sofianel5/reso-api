@@ -191,9 +191,7 @@ class VenueScanManager(APIView):
                 timeslot.attending += 1
                 timeslot.save()
                 break
-        try:
-            assert(registered)
-        except:
+        if not registered:
             return Response(status=status.HTTP_412_PRECONDITION_FAILED)
         
         hs = HandshakeRequestFromVenue.objects.create(_from=venue, _to=to)
@@ -357,7 +355,7 @@ class TimeSlotNotes(APIView):
             if not timeslot.notes is None:
                 return Response({"notes": timeslot.notes})
             else:
-                return Response()
+                return Response({"notes": ""})
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED) 
 

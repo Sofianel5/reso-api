@@ -66,17 +66,17 @@ class Venue(models.Model):
         if self.share_link is None:
             self.share_link = create_dynamic_link(
                 "https://api.tracery.us/venues/share/", 
-                {"venue": self.pk}, 
-                f"Book a time to visit {self.title} on The Reso App",
+                {"venue": self.pk},
+                f"Click to book your private viewing at {self.title} on The Reso App",
                 self.description,
                 self.image.url
             )
         if self.admin.share_link is None:
             self.admin.share_link = create_dynamic_link(
-                "https://api.tracery.us/users/share/", 
+                "https://api.tracery.us/users/share/",
                 {"user": self.admin.pk},
                 f"View {self.admin}'s listings on The Reso App",
-                "The Reso App is an all in one solution for in person events. The Reso App allows you to book times in advance to visit locations to save time and stay safe.",
+                "Click to book your private viewings on The Reso App.",
                 self.admin.profile_picture.url
             )
             self.admin.save()
@@ -146,7 +146,7 @@ class TimeSlot(models.Model):
     
     def send_user_form_email(self, attendee):
         subject = "Form to be admitted entry to " + self.venue.title 
-        from_email = "accounts@tracery.us"
+        from_email = "The Reso App <accounts@tracery.us>"
         to_email = attendee.email 
         text_content = f"""Hello, in order to be admitted into {self.venue.title}, the law requires you to complete this form.
         {self.venue.form_url}
@@ -173,7 +173,7 @@ class TimeSlot(models.Model):
     
     def send_admin_attendee_email(self, attendee):
         subject = "Someone just registered to visit your venue"
-        from_email = "accounts@tracery.us"
+        from_email = "The Reso App <accounts@tracery.us>"
         to_email = self.venue.admin.email 
         text_content = f"""Hello {self.venue.admin.full_name},
 The Reso App user {attendee.full_name} just registered to visit {self.venue.title} from {self.start.strftime('%m/%d %-I:%M %p')} to {self.stop.strftime('%m/%d %-I:%M %p')}.

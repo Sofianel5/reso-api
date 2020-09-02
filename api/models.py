@@ -26,6 +26,6 @@ class HandshakeRequestFromVenue(models.Model):
         return "From(venue) " + self._from.__str__() + " to " + self._to.__str__()
     
     def confirm(self):
-        handshake = PeerToVenueHandshake.objects.create(venue=_from, person=_to)
+        handshake = PeerToVenueHandshake.objects.create(venue=self._from, user=self._to)
         handshake.save()
         self.delete()
